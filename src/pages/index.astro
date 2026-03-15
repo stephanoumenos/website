@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const recentPosts = allPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
+---
+
+<BaseLayout title="Stefano De Checchi — writing on veganism & programming">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+    <!-- Hero -->
+    <section class="mb-20">
+      <p class="text-sm font-medium text-sage-600 dark:text-sage-400 mb-4 tracking-wide uppercase">
+        Hi, I'm
+      </p>
+      <h1 class="font-[Instrument_Serif,Georgia,serif] text-5xl sm:text-6xl font-normal text-stone-900 dark:text-stone-100 leading-tight mb-6">
+        Stefano De Checchi.
+      </h1>
+      <p class="text-xl text-stone-500 dark:text-stone-400 leading-relaxed max-w-xl">
+        I write about living without harm and building software.
+        Sometimes both at once.
+      </p>
+    </section>
+
+    <!-- Recent posts -->
+    <section>
+      <div class="flex items-baseline justify-between mb-4">
+        <h2 class="text-xs font-semibold uppercase tracking-widest text-stone-400 dark:text-stone-500">
+          Recent writing
+        </h2>
+        <a
+          href="/writing"
+          class="text-sm text-sage-700 dark:text-sage-400 hover:underline"
+        >
+          All posts →
+        </a>
+      </div>
+      <div>
+        {
+          recentPosts.map((post) => (
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              slug={post.id.replace(/\.[^.]+$/, '')}
+              tags={post.data.tags}
+            />
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</BaseLayout>

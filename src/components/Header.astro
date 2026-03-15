@@ -1,0 +1,44 @@
+---
+import ThemeToggle from './ThemeToggle.tsx';
+
+const navLinks = [
+  { href: '/writing', label: 'Writing' },
+  { href: '/about', label: 'About' },
+];
+
+const pathname = Astro.url.pathname;
+---
+
+<header
+  class="sticky top-0 z-50 bg-stone-50/90 dark:bg-stone-950/90 backdrop-blur-sm border-b border-stone-200 dark:border-stone-800"
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+    <a
+      href="/"
+      class="font-[Instrument_Serif,Georgia,serif] text-lg text-stone-900 dark:text-stone-100 hover:text-sage-700 dark:hover:text-sage-400 transition-colors"
+    >
+      stephanoumenos.com
+    </a>
+
+    <nav class="flex items-center gap-1">
+      {
+        navLinks.map(({ href, label }) => (
+          <a
+            href={href}
+            class:list={[
+              'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+              pathname === href || pathname.startsWith(href + '/')
+                ? 'text-sage-700 dark:text-sage-400 bg-sage-50 dark:bg-sage-950/30'
+                : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800',
+            ]}
+          >
+            {label}
+          </a>
+        ))
+      }
+      <div class="ml-1 pl-2 border-l border-stone-200 dark:border-stone-700">
+        <ThemeToggle client:load />
+      </div>
+    </nav>
+  </div>
+</header>

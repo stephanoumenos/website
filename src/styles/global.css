@@ -1,0 +1,75 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Class-based dark mode (vs. media query default) */
+@variant dark (&:where(.dark, .dark *));
+
+/* Custom sage green palette — muted, earthy, sophisticated */
+@theme {
+  --color-sage-50: #f2f5f0;
+  --color-sage-100: #e0e8dc;
+  --color-sage-200: #c5d4be;
+  --color-sage-300: #a3b99b;
+  --color-sage-400: #849c7b;
+  --color-sage-500: #6a8362;
+  --color-sage-600: #546a4e;
+  --color-sage-700: #435540;
+  --color-sage-800: #384536;
+  --color-sage-900: #2f3a2e;
+  --color-sage-950: #1a201a;
+}
+
+/* Typography plugin customization */
+@layer base {
+  .prose {
+    --tw-prose-links: var(--color-sage-700);
+    --tw-prose-invert-links: var(--color-sage-400);
+  }
+
+  /* Remove backticks around inline code */
+  .prose :where(code):not(:where([class~="not-prose"] *))::before,
+  .prose :where(code):not(:where([class~="not-prose"] *))::after {
+    content: "";
+  }
+
+  .prose :where(code):not(:where([class~="not-prose"] *)) {
+    background-color: var(--color-stone-100);
+    padding: 0.15em 0.35em;
+    border-radius: 0.25rem;
+    font-weight: 400;
+  }
+
+  .dark .prose :where(code):not(:where([class~="not-prose"] *)) {
+    background-color: var(--color-stone-800);
+  }
+
+  /* Serif headings in prose */
+  .prose :where(h1, h2, h3, h4):not(:where([class~="not-prose"] *)) {
+    font-family: "Instrument Serif", Georgia, "Times New Roman", serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-stone-50);
+    color: var(--color-stone-900);
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .dark body {
+    background-color: var(--color-stone-950);
+    color: var(--color-stone-100);
+  }
+
+  ::selection {
+    background-color: var(--color-sage-200);
+  }
+
+  .dark ::selection {
+    background-color: var(--color-sage-900);
+  }
+}

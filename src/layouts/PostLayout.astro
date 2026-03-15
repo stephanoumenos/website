@@ -1,0 +1,87 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags: string[];
+}
+
+const { title, description, pubDate, updatedDate, tags } = Astro.props;
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout title={`${title} — Stefano De Checchi`} description={description}>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Back -->
+    <a
+      href="/writing"
+      class="inline-flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 mb-10 transition-colors group"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="group-hover:-translate-x-0.5 transition-transform"
+      >
+        <path d="m15 18-6-6 6-6" />
+      </svg>
+      All writing
+    </a>
+
+    <!-- Header -->
+    <header class="mb-10">
+      <div class="flex flex-wrap gap-1.5 mb-5">
+        {
+          tags.map((tag) => (
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-sage-50 dark:bg-sage-950/40 text-sage-700 dark:text-sage-400 border border-sage-200 dark:border-sage-900">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+      <h1
+        class="font-[Instrument_Serif,Georgia,serif] text-4xl sm:text-5xl font-normal text-stone-900 dark:text-stone-100 leading-tight mb-4"
+      >
+        {title}
+      </h1>
+      <p class="text-lg text-stone-500 dark:text-stone-400 leading-relaxed mb-5">
+        {description}
+      </p>
+      <div class="flex flex-wrap items-center gap-2 text-sm text-stone-400 dark:text-stone-500">
+        <time datetime={pubDate.toISOString()}>{fmt(pubDate)}</time>
+        {
+          updatedDate && (
+            <>
+              <span>·</span>
+              <span>Updated {fmt(updatedDate)}</span>
+            </>
+          )
+        }
+      </div>
+    </header>
+
+    <hr class="border-stone-200 dark:border-stone-800 mb-10" />
+
+    <!-- Post content -->
+    <article
+      class="prose prose-stone dark:prose-invert max-w-none
+        prose-headings:font-normal
+        prose-pre:bg-stone-900 dark:prose-pre:bg-stone-900
+        prose-pre:border prose-pre:border-stone-800
+        prose-img:rounded-lg"
+    >
+      <slot />
+    </article>
+  </div>
+</BaseLayout>

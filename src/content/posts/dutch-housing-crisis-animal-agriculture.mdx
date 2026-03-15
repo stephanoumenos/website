@@ -1,0 +1,93 @@
+---
+title: "The Hidden Link Between Animal Agriculture and the Dutch Housing Crisis"
+description: "Over half the Netherlands is devoted to raising animals and growing their feed. Seven percent is left for people to live in."
+pubDate: 2024-03-15
+tags: ["vegan", "netherlands"]
+---
+
+The Netherlands has a housing crisis. Waiting lists stretch for years. Construction projects stall under nitrogen regulations. Prices climb faster than wages. Everyone agrees the situation is dire, and everyone blames something different — immigration, zoning laws, NIMBYism, interest rates.
+
+Almost nobody talks about the cows.
+
+## The numbers
+
+When you add up the land used for livestock farming and the crops grown to feed those animals, animal agriculture occupies half the country's land surface. Residential housing accounts for roughly seven percent.
+
+{/* TODO: embed interactive treemap visualisation */}
+
+| Category | Area (km²) | Share |
+|---|---|---|
+| <span className="inline-flex items-center gap-2"><span className="size-2 rounded-full bg-red-500 dark:bg-red-400 shrink-0"></span>**Animal farming**</span> | **14,401** | **42.8%** |
+| Other farming | 5,523 | 16.4% |
+| Woodland and nature | 5,015 | 14.9% |
+| <span className="inline-flex items-center gap-2"><span className="size-2 rounded-full bg-emerald-500 dark:bg-emerald-400 shrink-0"></span>**Residential**</span> | **2,414** | **7.2%** |
+| <span className="inline-flex items-center gap-2"><span className="size-2 rounded-full bg-red-500 dark:bg-red-400 shrink-0"></span>**Livestock feed**</span> | **2,381** | **7.1%** |
+| Non-residential built-up | 1,680 | 5.0% |
+| Transport | 1,151 | 3.4% |
+| Recreation | 1,083 | 3.2% |
+
+That's a 7-to-1 ratio. For every square kilometre of housing, seven square kilometres are used to raise animals or grow their feed.
+
+The arable crop data makes the picture even clearer. Of the 651,805 hectares of arable cropland in the Netherlands, 41% grows animal feed — dominated by silage maize (green maize), which alone occupies 179,896 hectares. That single feed crop takes up more land than all Dutch potato cultivation (158,077 ha) or all sugar beet (80,634 ha).
+
+### How we calculated this
+
+These figures combine two public datasets from CBS (Centraal Bureau voor de Statistiek), the Dutch government's statistics agency:
+
+1. **Land use survey** ([Bodemgebruik, 2017](https://opendata.cbs.nl/#/CBS/en/dataset/70262ENG/table)) — breaks the Netherlands into categories like agriculture, residential, transport, woodland, and water. This gives us the total agricultural area (2,230,445 ha) and all non-agricultural categories.
+
+2. **Agricultural census** ([Landbouwtelling, 2023](https://opendata.cbs.nl/#/CBS/en/dataset/80783ENG/table)) — breaks farm land down by type: grazing livestock, granivores, field crops, horticulture, and so on. This lets us split the agriculture total into animal farming, livestock feed, and other farming.
+
+3. **Arable crops production** ([CBS 7100eng, 2023](https://opendata.cbs.nl/#/CBS/en/dataset/7100eng/table)) — lists the area under cultivation for each arable crop. We classify each crop by its primary use (feed, food, or industrial) to calculate what share of arable cropland grows animal feed, replacing a previous rough estimate with a data-driven figure.
+
+A few methodological notes:
+
+- **Water surfaces are excluded.** The Netherlands' total area includes the IJsselmeer, the Wadden Sea, and the North Sea coast — roughly 7,900 km² of water. Including them would inflate the denominator and obscure how *land* is actually used. All percentages are calculated against land surface only (33,648 km²).
+- **The livestock feed share (41%) is calculated from CBS crop area data.** Each arable crop is classified by its primary use. Crops grown exclusively for feed (silage maize, corn cob mix, grain maize, triticale) are counted at 100%. Mixed-use cereals (wheat, barley, rye, oats) are assigned partial feed shares based on typical Dutch use patterns.
+- **The agricultural census and land use survey use different methodologies** and cover slightly different totals. We use the census to calculate *proportions* (what share of farm land goes to animal vs. crop farming), then apply those proportions to the land use survey's total. This avoids double-counting.
+
+The analysis script that generates these numbers from the raw CBS data is [available in the site's repository](https://github.com/stephanoumenos/website/blob/main/scripts/land-use-analysis.ts). You can run it yourself: `npm run land-use`.
+
+## The nitrogen bottleneck
+
+The housing shortage isn't just a matter of land. It's also a matter of chemistry.
+
+The Netherlands has some of the strictest nitrogen emission regulations in Europe, introduced after courts ruled the government had failed to protect Natura 2000 habitats. These regulations have brought construction to a near standstill in many regions. The building industry accounts for roughly 0.6% of the country's nitrogen emissions. Animal agriculture accounts for over 50%.
+
+The arithmetic is hard to ignore: the sector responsible for the smallest fraction of nitrogen emissions is bearing the heaviest regulatory burden, while the sector responsible for the largest fraction continues to operate largely unimpeded.
+
+## Following the money
+
+The imbalance extends beyond Dutch borders. According to a [2024 study from the University of Leiden](https://www.universiteitleiden.nl/en/news/2024/04/how-eu-farm-subsidies-favour-high-emission-animal-products), more than 80% of EU farm subsidies flow to animal farming and feed production — the same sector responsible for an estimated 84% of the EU's food-related greenhouse gas emissions.
+
+In other words, European taxpayers are financing the very industry that makes it harder to build homes in the Netherlands.
+
+## A constitutional question
+
+The Dutch Constitution is unusually explicit about the government's obligations. Article 21 requires authorities to keep the country habitable and protect the environment. Article 22 mandates the promotion of public health and the provision of sufficient housing.
+
+By any honest reading, a policy regime that allocates over half the nation's land to a single industry — one that simultaneously dominates nitrogen emissions, contributes to climate change, and crowds out residential construction — sits uncomfortably with those obligations.
+
+## The broader picture
+
+The housing crisis is one consequence among many. Animal agriculture is the leading driver of deforestation and biodiversity loss worldwide. It is a significant contributor to antibiotic resistance. It has been linked to the emergence of zoonotic diseases — including, in recent years, avian influenza outbreaks that have swept through Dutch farms. The health effects of diets high in processed animal products are well documented in epidemiological literature.
+
+And then there is the matter that tends to make people uncomfortable: the roughly 100 billion land animals killed globally each year, most of them in conditions that no one who has seen them would willingly defend.
+
+These are not separate issues. They share a root cause.
+
+## What comes next
+
+None of this requires a radical imagination. It requires looking at data the government already collects and asking straightforward questions about how we use our land.
+
+A few starting points:
+
+- **Reconsider your own choices.** Demand shapes supply. Every meal is a decision.
+- **Share the data.** Most people have never seen these numbers presented together. That alone is worth something.
+- **Demand policy coherence.** If nitrogen regulations can halt housing construction, they should apply proportionally to the sector that produces most of the nitrogen.
+
+The Netherlands is a small, densely populated country with a large agricultural sector and a severe housing shortage. The connection between the two is not hidden. It's just not talked about.
+
+---
+
+*Land use data: [CBS Bodemgebruik 2017](https://opendata.cbs.nl/#/CBS/en/dataset/70262ENG/table). Farm type breakdown: [CBS Landbouwtelling 2023](https://opendata.cbs.nl/#/CBS/en/dataset/80783ENG/table). Arable crops: [CBS 7100eng, 2023](https://opendata.cbs.nl/#/CBS/en/dataset/7100eng/table). Nitrogen figures: RIVM. Analysis script: [`scripts/land-use-analysis.ts`](https://github.com/stephanoumenos/website/blob/main/scripts/land-use-analysis.ts).*
