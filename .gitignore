@@ -1,6 +1,15 @@
 dist/
 .output/
+.astro/
 node_modules/
 .env
 .env.*
 .DS_Store
+
+# Script virtual environments
+scripts/*/.venv/
+
+# Large source data files
+*.gpkg
+*.gpkg-shm
+*.gpkg-wal

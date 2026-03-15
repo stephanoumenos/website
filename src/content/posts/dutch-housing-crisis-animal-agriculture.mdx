@@ -1,9 +1,11 @@
 ---
-title: "The Hidden Link Between Animal Agriculture and the Dutch Housing Crisis"
+title: "The Leading Cause of The Dutch Housing Crisis: Animal Agriculture"
 description: "Over half the Netherlands is devoted to raising animals and growing their feed. Seven percent is left for people to live in."
 pubDate: 2024-03-15
 tags: ["vegan", "netherlands"]
 ---
+
+import AgriculturalMap from "../../components/AgriculturalMap";
 
 The Netherlands has a housing crisis. Waiting lists stretch for years. Construction projects stall under nitrogen regulations. Prices climb faster than wages. Everyone agrees the situation is dire, and everyone blames something different — immigration, zoning laws, NIMBYism, interest rates.
 
@@ -13,18 +15,18 @@ Almost nobody talks about the cows.
 
 When you add up the land used for livestock farming and the crops grown to feed those animals, animal agriculture occupies half the country's land surface. Residential housing accounts for roughly seven percent.
 
-{/* TODO: embed interactive treemap visualisation */}
+<AgriculturalMap client:visible />
 
-| Category | Area (km²) | Share |
-|---|---|---|
-| <span className="inline-flex items-center gap-2"><span className="size-2 rounded-full bg-red-500 dark:bg-red-400 shrink-0"></span>**Animal farming**</span> | **14,401** | **42.8%** |
-| Other farming | 5,523 | 16.4% |
-| Woodland and nature | 5,015 | 14.9% |
-| <span className="inline-flex items-center gap-2"><span className="size-2 rounded-full bg-emerald-500 dark:bg-emerald-400 shrink-0"></span>**Residential**</span> | **2,414** | **7.2%** |
-| <span className="inline-flex items-center gap-2"><span className="size-2 rounded-full bg-red-500 dark:bg-red-400 shrink-0"></span>**Livestock feed**</span> | **2,381** | **7.1%** |
-| Non-residential built-up | 1,680 | 5.0% |
-| Transport | 1,151 | 3.4% |
-| Recreation | 1,083 | 3.2% |
+| Category                                                                                                                                                         | Area (km²) | Share     |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------- |
+| <span className="inline-flex items-center gap-2"><span className="size-2 rounded-full bg-red-500 dark:bg-red-400 shrink-0"></span>**Animal farming**</span>      | **14,401** | **42.8%** |
+| Other farming                                                                                                                                                    | 5,523      | 16.4%     |
+| Woodland and nature                                                                                                                                              | 5,015      | 14.9%     |
+| <span className="inline-flex items-center gap-2"><span className="size-2 rounded-full bg-emerald-500 dark:bg-emerald-400 shrink-0"></span>**Residential**</span> | **2,414**  | **7.2%**  |
+| <span className="inline-flex items-center gap-2"><span className="size-2 rounded-full bg-red-500 dark:bg-red-400 shrink-0"></span>**Livestock feed**</span>      | **2,381**  | **7.1%**  |
+| Non-residential built-up                                                                                                                                         | 1,680      | 5.0%      |
+| Transport                                                                                                                                                        | 1,151      | 3.4%      |
+| Recreation                                                                                                                                                       | 1,083      | 3.2%      |
 
 That's a 7-to-1 ratio. For every square kilometre of housing, seven square kilometres are used to raise animals or grow their feed.
 
@@ -42,11 +44,13 @@ These figures combine two public datasets from CBS (Centraal Bureau voor de Stat
 
 A few methodological notes:
 
-- **Water surfaces are excluded.** The Netherlands' total area includes the IJsselmeer, the Wadden Sea, and the North Sea coast — roughly 7,900 km² of water. Including them would inflate the denominator and obscure how *land* is actually used. All percentages are calculated against land surface only (33,648 km²).
+- **Water surfaces are excluded.** The Netherlands' total area includes the IJsselmeer, the Wadden Sea, and the North Sea coast — roughly 7,900 km² of water. Including them would inflate the denominator and obscure how _land_ is actually used. All percentages are calculated against land surface only (33,648 km²).
 - **The livestock feed share (41%) is calculated from CBS crop area data.** Each arable crop is classified by its primary use. Crops grown exclusively for feed (silage maize, corn cob mix, grain maize, triticale) are counted at 100%. Mixed-use cereals (wheat, barley, rye, oats) are assigned partial feed shares based on typical Dutch use patterns.
-- **The agricultural census and land use survey use different methodologies** and cover slightly different totals. We use the census to calculate *proportions* (what share of farm land goes to animal vs. crop farming), then apply those proportions to the land use survey's total. This avoids double-counting.
+- **The agricultural census and land use survey use different methodologies** and cover slightly different totals. We use the census to calculate _proportions_ (what share of farm land goes to animal vs. crop farming), then apply those proportions to the land use survey's total. This avoids double-counting.
 
 The analysis script that generates these numbers from the raw CBS data is [available in the site's repository](https://github.com/stephanoumenos/website/blob/main/scripts/land-use-analysis.ts). You can run it yourself: `npm run land-use`.
+
+The interactive map above is generated from the [CBS Bestand Bodemgebruik 2017](https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/natuur-en-milieu/bestand-bodemgebruik) GeoPackage — the same land use survey referenced in the table. The [extraction script](https://github.com/stephanoumenos/website/blob/main/scripts/dutch-housing-crisis/extract_agriculture_geojson.py) filters for agricultural land categories ("Landbouw en overig agrarisch" and "Glastuinbouw"), simplifies the geometry to reduce file size, and reprojects to WGS84 for display.
 
 ## The nitrogen bottleneck
 
@@ -90,4 +94,4 @@ The Netherlands is a small, densely populated country with a large agricultural 
 
 ---
 
-*Land use data: [CBS Bodemgebruik 2017](https://opendata.cbs.nl/#/CBS/en/dataset/70262ENG/table). Farm type breakdown: [CBS Landbouwtelling 2023](https://opendata.cbs.nl/#/CBS/en/dataset/80783ENG/table). Arable crops: [CBS 7100eng, 2023](https://opendata.cbs.nl/#/CBS/en/dataset/7100eng/table). Nitrogen figures: RIVM. Analysis script: [`scripts/land-use-analysis.ts`](https://github.com/stephanoumenos/website/blob/main/scripts/land-use-analysis.ts).*
+_Land use data: [CBS Bodemgebruik 2017](https://opendata.cbs.nl/#/CBS/en/dataset/70262ENG/table). Farm type breakdown: [CBS Landbouwtelling 2023](https://opendata.cbs.nl/#/CBS/en/dataset/80783ENG/table). Arable crops: [CBS 7100eng, 2023](https://opendata.cbs.nl/#/CBS/en/dataset/7100eng/table). Nitrogen figures: RIVM. Analysis script: [`scripts/land-use-analysis.ts`](https://github.com/stephanoumenos/website/blob/main/scripts/land-use-analysis.ts)._
