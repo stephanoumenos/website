@@ -13,3 +13,4 @@ scripts/*/.venv/
 *.gpkg
 *.gpkg-shm
 *.gpkg-wal
+table_*.csv

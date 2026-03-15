@@ -5,8 +5,9 @@ import Map from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 const INITIAL_VIEW_STATE = {
-  longitude: 4.895168,
-  latitude: 52.370216,
+  // Amsterdam coordinates
+  longitude: 4.9041,
+  latitude: 52.3676,
   zoom: 9,
   pitch: 45,
   bearing: 0,
@@ -36,6 +37,7 @@ export default function AgriculturalMap() {
   });
 
   return (
+    <div className="lg:-mx-24 xl:-mx-40">
     <div className="my-8 h-[600px] w-full relative rounded-xl overflow-hidden shadow-2xl border border-white/10 bg-[#0a0a0a]">
       <DeckGL
         initialViewState={INITIAL_VIEW_STATE}
@@ -57,7 +59,7 @@ export default function AgriculturalMap() {
             <div>
               <div className="font-bold text-[#ff6400]">Agricultural Land</div>
               <p className="text-[10px] text-gray-400 leading-tight">
-                Farming &amp; greenhouse horticulture (~54% of land).
+                All farming combined (~66% of land). Roughly three-quarters is animal agriculture.
               </p>
             </div>
           </div>
@@ -77,6 +79,7 @@ export default function AgriculturalMap() {
           Source: CBS Bodemgebruik 2017
         </div>
       </div>
+    </div>
     </div>
   );
 }
