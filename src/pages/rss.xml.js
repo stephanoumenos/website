@@ -4,8 +4,8 @@ import { getCollection } from 'astro:content';
 export async function GET(context) {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
   return rss({
-    title: 'Stefano De Checchi',
-    description: 'Writing on veganism and programming.',
+    title: 'stephanoumenos',
+    description: 'Writing on policy, technology, and the systems that shape how we live.',
     site: context.site,
     items: posts
       .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())

@@ -6,9 +6,10 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 const INITIAL_VIEW_STATE = {
   // Amsterdam coordinates
-  longitude: 4.9041,
-  latitude: 52.3676,
-  zoom: 9,
+  // Centred on the Randstad
+  longitude: 4.75,
+  latitude: 52.1,
+  zoom: 8.5,
   pitch: 45,
   bearing: 0,
 };
