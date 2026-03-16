@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import DeckGL from "@deck.gl/react";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import Map from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 const INITIAL_VIEW_STATE = {
-  // Amsterdam coordinates
+  // Amsterdam coordinates
   // Centred on the Randstad
   longitude: 4.75,
   latitude: 52.1,
@@ -15,27 +15,33 @@ const INITIAL_VIEW_STATE = {
 };
 
 export default function AgriculturalMap() {
-  const agriculturalLayer = new GeoJsonLayer({
-    id: "agricultural-layer",
-    data: "/data/agriculture_2017.geojson",
-    filled: true,
-    stroked: true,
-    extruded: false,
-    getFillColor: [255, 100, 0, 40],
-    getLineColor: [255, 100, 0, 120],
-    lineWidthMinPixels: 1,
-  });
-
-  const urbanLayer = new GeoJsonLayer({
-    id: "urban-layer",
-    data: "/data/urban_2017.geojson",
-    filled: true,
-    stroked: true,
-    extruded: false,
-    getFillColor: [57, 255, 20, 25],
-    getLineColor: [57, 255, 20, 80],
-    lineWidthMinPixels: 1,
-  });
+  const layers = useMemo(
+    () => [
+      new GeoJsonLayer({
+        id: "agricultural-layer",
+        data: "/data/agriculture_2017.geojson",
+        filled: true,
+        stroked: true,
+        extruded: false,
+        pickable: false,
+        getFillColor: [255, 100, 0, 40],
+        getLineColor: [255, 100, 0, 120],
+        lineWidthMinPixels: 1,
+      }),
+      new GeoJsonLayer({
+        id: "urban-layer",
+        data: "/data/urban_2017.geojson",
+        filled: true,
+        stroked: true,
+        extruded: false,
+        pickable: false,
+        getFillColor: [57, 255, 20, 25],
+        getLineColor: [57, 255, 20, 80],
+        lineWidthMinPixels: 1,
+      }),
+    ],
+    [],
+  );
 
   return (
     <div className="lg:-mx-24 xl:-mx-40">
@@ -43,7 +49,8 @@ export default function AgriculturalMap() {
       <DeckGL
         initialViewState={INITIAL_VIEW_STATE}
         controller={true}
-        layers={[agriculturalLayer, urbanLayer]}
+        layers={layers}
+        useDevicePixels={1}
       >
         <Map mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json" />
       </DeckGL>
