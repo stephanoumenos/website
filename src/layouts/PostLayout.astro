@@ -7,16 +7,21 @@ interface Props {
   pubDate: Date;
   updatedDate?: Date;
   tags: string[];
+  headings?: { depth: number; slug: string; text: string }[];
 }
 
-const { title, description, pubDate, updatedDate, tags } = Astro.props;
+const { title, description, pubDate, updatedDate, tags, headings = [] } = Astro.props;
 
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+const tocHeadings = headings.filter(
+  (h) => h.depth <= 3 && h.slug !== 'contents'
+);
 ---
 
 <BaseLayout title={`${title} — Stefano De Checchi`} description={description}>
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-12">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-12 relative">
     <!-- Back -->
     <a
       href="/writing"
@@ -73,6 +78,35 @@ const fmt = (d: Date) =>
 
     <hr class="border-stone-200 dark:border-stone-800 mb-10" />
 
+    <!-- Sidebar TOC (desktop only) -->
+    {tocHeadings.length > 0 && (
+      <nav
+        id="sidebar-toc"
+        class="hidden 2xl:block fixed top-24 left-8 w-52 text-[0.9rem]"
+        aria-label="Table of contents"
+      >
+        <div class="text-sm font-semibold text-stone-400 dark:text-stone-500 uppercase tracking-wider mb-3">
+          On this page
+        </div>
+        <ul class="flex flex-col gap-1.5">
+          {tocHeadings.map((h) => (
+            <li>
+              <a
+                href={`#${h.slug}`}
+                data-toc-link={h.slug}
+                class:list={[
+                  "toc-link block hover:text-stone-700 dark:hover:text-stone-300 transition-colors leading-snug",
+                  h.depth === 2 ? "text-stone-400 dark:text-stone-500" : "pl-3 text-[0.8rem] text-stone-400/70 dark:text-stone-500/70",
+                ]}
+              >
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )}
+
     <!-- Post content -->
     <article
       class="prose prose-stone dark:prose-invert max-w-none
@@ -85,3 +119,61 @@ const fmt = (d: Date) =>
     </article>
   </div>
 </BaseLayout>
+
+<style>
+  .toc-link.active {
+    color: var(--color-stone-900);
+    font-weight: 600;
+  }
+  :global(.dark) .toc-link.active {
+    color: var(--color-stone-100);
+  }
+</style>
+
+<script>
+  function initToc() {
+    const nav = document.getElementById('sidebar-toc');
+    if (!nav) return;
+
+    // Intersection Observer for active heading
+    const links = nav.querySelectorAll<HTMLAnchorElement>('[data-toc-link]');
+    const slugs = Array.from(links).map((l) => l.dataset.tocLink!);
+    const headingEls = slugs
+      .map((s) => document.getElementById(s))
+      .filter(Boolean) as HTMLElement[];
+
+    if (headingEls.length === 0) return;
+
+    let activeSlug = slugs[0];
+
+    function setActive(slug: string) {
+      if (slug === activeSlug) return;
+      activeSlug = slug;
+      links.forEach((l) => {
+        l.classList.toggle('active', l.dataset.tocLink === slug);
+      });
+    }
+
+    // Highlight the heading closest to (but above) the scroll offset
+    const OFFSET = 100; // slightly more than scroll-padding-top (5rem = 80px)
+
+    function updateActive() {
+      let current = slugs[0];
+      for (let i = 0; i < headingEls.length; i++) {
+        if (headingEls[i].getBoundingClientRect().top <= OFFSET) {
+          current = slugs[i];
+        } else {
+          break;
+        }
+      }
+      setActive(current);
+    }
+
+    updateActive();
+    window.addEventListener('scroll', updateActive, { passive: true });
+  }
+
+  // Run on initial load and on Astro page transitions
+  initToc();
+  document.addEventListener('astro:page-load', initToc);
+</script>
