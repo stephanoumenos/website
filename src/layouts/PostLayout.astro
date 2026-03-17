@@ -144,7 +144,7 @@ const tocHeadings = headings.filter(
 
     if (headingEls.length === 0) return;
 
-    let activeSlug = slugs[0];
+    let activeSlug = '';
 
     function setActive(slug: string) {
       if (slug === activeSlug) return;
