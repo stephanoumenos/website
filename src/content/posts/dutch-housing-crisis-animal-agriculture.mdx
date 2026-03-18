@@ -149,22 +149,24 @@ The Netherlands is a small, densely populated country with a severe housing shor
 
 ## Appendix: data sources and methodology
 
-The land use figures, the interactive map, and the breakdown table in [The numbers](#the-numbers) are derived from three public datasets published by CBS (Centraal Bureau voor de Statistiek), the Dutch government statistics agency:
+### Land use
 
-1. **Land use survey** ([Bodemgebruik, 2017](https://opendata.cbs.nl/#/CBS/en/dataset/70262ENG/table)) — classifies every parcel in the Netherlands by use: agriculture, residential, transport, woodland, water, etc. This provides the total agricultural area (2,230,445 ha) and all non-agricultural categories.
+The map, table, and land use figures in [The numbers](#the-numbers) are derived from three CBS datasets:
 
-2. **Agricultural census** ([Landbouwtelling, 2023](https://opendata.cbs.nl/#/CBS/en/dataset/80783ENG/table)) — breaks farm land down by type: grazing livestock, granivores, field crops, horticulture, and so on. This lets us split the agriculture total into animal farming, livestock feed, and other farming.
+1. **[Bodemgebruik, 2017](https://opendata.cbs.nl/#/CBS/en/dataset/70262ENG/table)** — land use survey classifying every parcel by use. Provides the total agricultural area (2,230,445 ha) and all non-agricultural categories.
+2. **[Landbouwtelling, 2023](https://opendata.cbs.nl/#/CBS/en/dataset/80783ENG/table)** — agricultural census breaking farm land down by type (grazing livestock, granivores, field crops, horticulture). Used to split the agriculture total into animal farming, livestock feed, and other farming.
+3. **[CBS 7100eng, 2023](https://opendata.cbs.nl/#/CBS/en/dataset/7100eng/table)** — arable crop areas classified by primary use (feed, food, industrial). Used to calculate the feed share of arable cropland.
 
-3. **Arable crops production** ([CBS 7100eng, 2023](https://opendata.cbs.nl/#/CBS/en/dataset/7100eng/table)) — lists the area under cultivation for each arable crop, classified by primary use (feed, food, or industrial) to calculate the feed share of arable cropland.
+Water surfaces (IJsselmeer, Wadden Sea, North Sea coast — ~7,900 km²) are excluded; all percentages use land surface only (33,648 km²). The livestock feed share (41%) counts crops grown exclusively for feed (silage maize, corn cob mix, grain maize, triticale) at 100% and assigns partial feed shares to mixed-use cereals based on typical Dutch use patterns. Because the census and land use survey use different methodologies, we use the census to calculate _proportions_ and apply them to the land use survey totals to avoid double-counting.
 
-**The interactive map** is generated directly from the Bodemgebruik 2017 [GeoPackage](https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/natuur-en-milieu/bestand-bodemgebruik), the same dataset behind the land use figures in the table. The [extraction script](https://github.com/stephanoumenos/website/blob/main/scripts/dutch-housing-crisis/extract_agriculture_geojson.py) filters for the agricultural and residential land categories, simplifies the geometry for browser display, and reprojects to WGS84.
+The interactive map is generated from the Bodemgebruik 2017 [GeoPackage](https://www.cbs.nl/nl-nl/dossier/nederland-regionaal/geografische-data/natuur-en-milieu/bestand-bodemgebruik). The [extraction script](https://github.com/stephanoumenos/website/blob/main/scripts/dutch-housing-crisis/extract_agriculture_geojson.py) filters for agricultural and residential categories, simplifies geometry for the browser, and reprojects to WGS84. The [analysis script](https://github.com/stephanoumenos/website/blob/main/scripts/land-use-analysis.ts) that generates the land use numbers from raw CBS data is also available in the repository.
 
-**Methodological notes:**
+### Nitrogen and housing
 
-- Water surfaces (IJsselmeer, Wadden Sea, North Sea coast — ~7,900 km²) are excluded. All percentages use land surface only (33,648 km²).
-- The livestock feed share (41%) is calculated from CBS crop area data. Crops grown exclusively for feed (silage maize, corn cob mix, grain maize, triticale) count at 100%. Mixed-use cereals are assigned partial feed shares based on typical Dutch use patterns.
-- The agricultural census and land use survey use different methodologies. We use the census to calculate _proportions_, then apply them to the land use survey totals to avoid double-counting.
+- **Nitrogen emissions:** [CBS nitrogen dossier](https://www.cbs.nl/en-gb/dossier/nitrogen/nitrogen-emissions-into-the-atmosphere) (2022 data) and [RIVM](https://www.rivm.nl/en/nitrogen).
+- **18,000 suspended projects:** [Nieuwsuur/NOS](https://nos.nl/artikel/2300285-gemeenten-worstelen-met-stilgelegde-projecten-door-stikstofuitspraak) (September 2019).
+- **23,000 homes prevented:** [Colliers](https://www.colliers.com/nl-nl/research/nederland-mist-23000-woningen-door-stikstofuitspraak) (January 2024).
+- **244,000 homes at risk:** [Bouwend Nederland](https://www.bouwendnederland.nl/nieuws/algemeen/stikstof-zet-bouw-244000-woningen-op-slot-en-economische-schade-van-138-miljard-dreigt) (March 2025).
+- **Housing deficit of 410,000:** [Capital Value and ABF Research](https://nltimes.nl/2026/02/03/dutch-housing-shortage-rises-410000-homes-rental-market-particularly-affected) (February 2026).
 
-**Nitrogen emissions** are sourced from [CBS nitrogen dossier](https://www.cbs.nl/en-gb/dossier/nitrogen/nitrogen-emissions-into-the-atmosphere) (2022 data) and [RIVM](https://www.rivm.nl/en/nitrogen). The 18,000 suspended projects figure comes from [Nieuwsuur/NOS](https://nos.nl/artikel/2300285-gemeenten-worstelen-met-stilgelegde-projecten-door-stikstofuitspraak) (September 2019). The 23,000 homes estimate is from [Colliers](https://www.colliers.com/nl-nl/research/nederland-mist-23000-woningen-door-stikstofuitspraak) (January 2024). The 244,000 at-risk homes figure is from [Bouwend Nederland](https://www.bouwendnederland.nl/nieuws/algemeen/stikstof-zet-bouw-244000-woningen-op-slot-en-economische-schade-van-138-miljard-dreigt) (March 2025). The housing deficit of 410,000 is from [Capital Value and ABF Research](https://nltimes.nl/2026/02/03/dutch-housing-shortage-rises-410000-homes-rental-market-particularly-affected) (February 2026). For a comprehensive overview of the nitrogen crisis, see [Wikipedia (Dutch)](https://nl.wikipedia.org/wiki/Stikstofcrisis_in_Nederland).
-
-The [analysis script](https://github.com/stephanoumenos/website/blob/main/scripts/land-use-analysis.ts) that generates the land use numbers from raw CBS data is available in the site's repository.
+For a comprehensive overview of the nitrogen crisis, see [Wikipedia (Dutch)](https://nl.wikipedia.org/wiki/Stikstofcrisis_in_Nederland).
