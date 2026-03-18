@@ -94,7 +94,7 @@ export default function AgriculturalMap() {
 
   return (
     <div className="lg:-mx-24 xl:-mx-40">
-      <div className="my-8 relative shadow-2xl sm:shadow-none">
+      <div className="my-8 relative shadow-2xl sm:shadow-none rounded-xl overflow-hidden">
         {/* Map */}
         <div
           ref={mapRef}
