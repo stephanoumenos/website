@@ -113,7 +113,7 @@ export default function AgriculturalMap() {
           {/* Interaction hint — inside map container, after DeckGL */}
           {hintVisible && (
             <div
-              className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full pointer-events-none animate-pulse"
+              className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full pointer-events-none animate-pulse"
               style={{ zIndex: 99999 }}
             >
               {isMobile ? "Pinch & drag to explore" : "Scroll to zoom, drag to explore"}
