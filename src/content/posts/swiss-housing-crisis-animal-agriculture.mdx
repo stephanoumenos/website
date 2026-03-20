@@ -1,0 +1,134 @@
+---
+title: "Switzerland's Housing Crisis and the Agricultural Land Question"
+description: "Switzerland devotes vast stretches of land to livestock farming while housing costs spiral out of control."
+pubDate: 2026-03-18
+tags: ["switzerland", "housing", "agriculture", "policy"]
+draft: true
+---
+
+import SwissLandUseMap from "../../components/SwissLandUseMap";
+
+{/* TODO: This post is a work-in-progress. Research notes below. */}
+
+<SwissLandUseMap client:visible />
+
+## Research Notes
+
+### Data Sources for Interactive Map
+
+#### Land Use Data (equivalent to CBS Bodemgebruik)
+
+**Note:** The Arealstatistik is a 100m point grid, NOT vector polygons — not directly usable like CBS Bodemgebruik was for the NL map. Use the vector datasets below instead.
+
+- **Arealstatistik (NOAS04)** — BFS land use statistics. 72 categories on a 100m grid. Point-based, not polygon-based. Useful for statistics but not for the map overlay.
+  - https://opendata.swiss/en/dataset/arealstatistik-nach-standardnomenklatur-noas04
+
+- **Sentinel-2 Cropland vs Grassland Map** — Peer-reviewed, freely downloadable national map distinguishing cropland from permanent grassland at high resolution (84–95% accuracy). Key dataset for showing pastoral vs. arable land.
+  - https://www.envidat.ch/dataset/cropland-and-grassland-map-of-switzerland-based-on-sentinel-2-data
+  - Published paper: https://essd.copernicus.org/articles/14/295/2022/
+
+#### Geospatial / Vector Data for the Map
+
+##### Agricultural layer (orange)
+
+- **Nutzungsplanung (geodienste.ch)** — BEST single dataset. Contains both building zones AND agricultural zones as vector polygons. Closest equivalent to CBS Bodemgebruik. Available as GeoPackage, Shapefile, WFS. Nearly all cantons covered (gaps: Graubünden, Ticino, Zürich still in progress).
+  - https://www.geodienste.ch/services/npl_nutzungsplanung
+
+- **Landwirtschaftliche Nutzungsflächen** — Field-level vector polygons of individual cultivated areas (meadows, pastures, arable fields). GeoPackage format via geodienste.ch, per canton. Updated annually.
+  - https://www.geodienste.ch/services/lwb_nutzungsflaechen
+  - https://opendata.swiss/de/dataset/landwirtschaftliche-nutzungsflachen-schweiz
+
+- **Landwirtschaftliche Zonengrenzen** — 6 production zones + summer pasture as vector polygons. Direct download available (Shapefile + GeoPackage), EPSG:2056. Note: these are elevation/climate-based zone classifications (Talzone, Hügelzone, Bergzone I–IV, Sömmerungsgebiet), not individual fields.
+  - Shapefile: https://data.geo.admin.ch/ch.blw.landwirtschaftliche-zonengrenzen/landwirtschaftliche-zonengrenzen/landwirtschaftliche-zonengrenzen_2056.shp.zip
+  - GeoPackage: https://data.geo.admin.ch/ch.blw.landwirtschaftliche-zonengrenzen/landwirtschaftliche-zonengrenzen/landwirtschaftliche-zonengrenzen_2056.gdb.zip
+  - https://opendata.swiss/en/dataset/landwirtschaftliche-zonengrenzen-der-schweiz
+
+##### Residential/urban layer (green)
+
+- **Bauzonen Schweiz (KGK-CGC)** — Harmonized building zones for all of Switzerland. Vector polygons in 9 categories (Wohnzonen, Arbeitszonen, Mischzonen, etc.). ~174 MB ZIP. This is the residential equivalent.
+  - Download: https://www.kgk-cgc.ch/geodaten/geodaten-bauzonen-schweiz
+  - Preview: https://map.geo.admin.ch/?layers=ch.are.bauzonen
+  - https://opendata.swiss/en/dataset/bauzonen-schweiz-harmonisiert
+
+##### Fallback option
+
+- **CORINE Land Cover 2018** — Switzerland participates. Pre-classified urban/agricultural/forest vector polygons. Coarser (25ha minimum mapping unit) but simple and standardized. Registration required (free).
+  - https://land.copernicus.eu/en/products/corine-land-cover/clc2018
+  - Swiss-specific info: https://www.wsl.ch/en/projects/corine-switzerland/
+
+##### Other reference datasets
+
+- **swissTLM3D** — Swisstopo topographic landscape model. Has land cover (Bodenbedeckung) and area layers but does NOT classify agricultural vs. residential — more of a physical ground cover classification. Would need to combine with zoning data.
+  - https://opendata.swiss/en/dataset/swisstlm3d
+
+- **Landwirtschaftliche Nutzungseignung** — 10-class agricultural suitability map (soil, relief, climate). Reference only.
+  - https://opendata.swiss/de/dataset/landwirtschaftliche-nutzungseignung1
+
+#### Subsidy Data (Direktzahlungen — Swiss CAP equivalent)
+
+Switzerland's subsidy system is called **Direktzahlungen** (Direct Payments) under the **Agrarpolitik** (AP) framework, currently AP 2022+.
+
+- **Total**: CHF 2.791 billion in direct payments (2023). ~CHF 4.4 billion including all federal and cantonal subsidies.
+- **51% of farm income** comes from subsidies — more than 3× the OECD average.
+- **Avenir Suisse** estimates total economic cost at CHF 20.7 billion/year, or ~CHF 2,300 per household annually.
+
+**7 payment categories**: Cultural landscape, supply security, biodiversity, landscape quality, production systems, resource efficiency, transition contributions.
+
+Data sources:
+- **University of Bern interactive platform** — Visualizations + raw data downloads, broken down by farm type (cattle, pigs, poultry, crops, etc.) and contribution category. GitHub repo available.
+  - https://direktzahlungen-ch-bauern.opendata.iwi.unibe.ch/
+- **Canton-level breakdowns** on opendata.swiss (XLS format).
+  - https://opendata.swiss/en/dataset/ubersicht-direktzahlungen-alle-arten-nach-kantonen-2015
+- **Agrarbericht** (Agricultural Report) — Published annually with detailed tables.
+  - https://www.agrarbericht.ch/de/politik/direktzahlungen/finanzielle-mittel-fuer-direktzahlungen
+- **BLW/FOAG on opendata.swiss** — 122 datasets covering market data, subsidies, and more.
+  - https://opendata.swiss/en/organization/bundesamt-fur-landwirtschaft-blw
+- **OECD monitoring report** (English):
+  - https://www.oecd.org/en/publications/2025/10/agricultural-policy-monitoring-and-evaluation-2025_354e7040/full-report/switzerland_9badc265.html
+- **Avenir Suisse** (critical analysis of subsidy inefficiency):
+  - https://www.avenir-suisse.ch/en/publication/swiss-agriculture-continues-to-enjoy-growing-economic-privileges/
+
+#### Livestock Data (equivalent to CBS Landbouwtelling)
+
+- **Tierstatistik (identitas.ch)** — Livestock counts by canton AND municipality, downloadable as CSV. Covers cattle (since 2010), equids (since 2016), sheep & goats (since 2020).
+  - https://tierstatistik.identitas.ch/en/docs.html
+- **Cattle distribution by canton** on opendata.swiss.
+  - https://opendata.swiss/en/dataset/rinder-verteilung-pro-kanton
+- Key numbers (2022): 1,525,000 cattle, 1,374,000 pigs, 13,126,000 poultry.
+- Note: Pig and poultry data may require the BFS agricultural census directly (Tierstatistik focuses on individually tracked animals).
+
+### Housing Crisis Connection
+
+- 66% of the Swiss population rejects building on agricultural/green land despite the housing crisis.
+- 173 municipalities have rezoned 390 hectares of building land BACK to agricultural zones (Auszonung).
+- The **Raumplanungsgesetz** (Spatial Planning Act) revision tightened rules on building zones, directly constraining housing supply.
+- Active political tension between housing shortage and agricultural zone protection.
+
+Relevant reporting:
+- SIPA: https://sipa.swiss/urban-sprawl-farmland-under-pressure-from-property-development-and-urban-growth/?lang=en
+- SWI swissinfo.ch: https://www.swissinfo.ch/ger/wirtschaft/die-schweizer-raumplanung-produziert-gewinner-und-verlierer/45871044
+- ScienceDirect paper on land policy for affordable housing: https://www.sciencedirect.com/science/article/pii/S0264837720308930
+
+### Key Angles for the Article
+
+1. **The subsidy story is even more dramatic than the Netherlands** — 51% of farm income from subsidies vs. EU CAP levels. CHF 2,300 per household per year.
+2. **Land scarcity is acute** — Switzerland is mountainous, making habitable/buildable land genuinely scarce, yet large portions of the usable lowland go to livestock.
+3. **Rezoning paradox** — Municipalities are actively converting building land back to agricultural zones while housing costs spiral.
+4. **The Sentinel-2 map** could provide a powerful visual — cropland vs. grassland at high resolution, showing how much land is pastoral.
+
+### Recommended Map Approach
+
+Combine **Bauzonen** (residential areas → green layer) + **Nutzungsflächen** (agricultural parcels → orange layer). This mirrors the NL map approach with CBS urban + agriculture layers. Process both into simplified GeoJSON, reproject to WGS84.
+
+Alternatively, use **Nutzungsplanung** from geodienste.ch as a single dataset containing both zone types.
+
+### TODO
+
+- [ ] Download Bauzonen Shapefile from KGK-CGC (~174 MB)
+- [ ] Download Landwirtschaftliche Nutzungsflächen GeoPackage from geodienste.ch (per canton)
+- [ ] Write extraction script (like `extract_agriculture_geojson.py` for NL) to simplify + reproject to WGS84
+- [ ] Build interactive map component (similar to AgriculturalMap for NL)
+- [ ] Download and analyze subsidy data from University of Bern platform
+- [ ] Get municipality-level livestock data from Tierstatistik
+- [ ] Calculate land use percentages (agricultural vs. residential vs. other)
+- [ ] Write the article
