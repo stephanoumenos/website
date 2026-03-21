@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import DeckGL from "@deck.gl/react";
-import { GeoJsonLayer } from "@deck.gl/layers";
+import { PolygonLayer } from "@deck.gl/layers";
 import Map from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 
@@ -15,8 +15,35 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
 };
 
+type PolygonFeature = {
+  polygon: number[][][] | number[][][][];
+};
+
+/** Extract polygon coordinate rings from a GeoJSON geometry */
+function extractPolygons(geojson: any): PolygonFeature[] {
+  const features: PolygonFeature[] = [];
+  for (const feature of geojson.features ?? [geojson]) {
+    const geom = feature.geometry ?? feature;
+    if (geom.type === "Polygon") {
+      features.push({ polygon: geom.coordinates });
+    } else if (geom.type === "MultiPolygon") {
+      for (const poly of geom.coordinates) {
+        features.push({ polygon: poly });
+      }
+    }
+  }
+  return features;
+}
+
+type LayerData = {
+  animalAg: PolygonFeature[];
+  plantAg: PolygonFeature[];
+  residential: PolygonFeature[];
+};
+
 export default function SwissLandUseMap() {
   const [hintVisible, setHintVisible] = useState(true);
+  const [data, setData] = useState<LayerData | null>(null);
   const mapRef = useRef<HTMLDivElement>(null);
 
   // Hide hint on first real user interaction
@@ -31,11 +58,28 @@ export default function SwissLandUseMap() {
     return () => events.forEach((e) => el.removeEventListener(e, hide));
   }, [hintVisible]);
 
-  const layers = useMemo(
-    () => [
-      new GeoJsonLayer({
+  // Fetch and parse all GeoJSON files
+  useEffect(() => {
+    Promise.all([
+      fetch("/data/agriculture_animal_ch.geojson").then((r) => r.json()),
+      fetch("/data/agriculture_plant_ch.geojson").then((r) => r.json()),
+      fetch("/data/bauzonen_residential_2022.geojson").then((r) => r.json()),
+    ]).then(([animalGeo, plantGeo, residentialGeo]) => {
+      setData({
+        animalAg: extractPolygons(animalGeo),
+        plantAg: extractPolygons(plantGeo),
+        residential: extractPolygons(residentialGeo),
+      });
+    });
+  }, []);
+
+  const layers = useMemo(() => {
+    if (!data) return [];
+    return [
+      new PolygonLayer<PolygonFeature>({
         id: "animal-agriculture-layer",
-        data: "/data/agriculture_animal_ch.geojson",
+        data: data.animalAg,
+        getPolygon: (d) => d.polygon,
         filled: true,
         stroked: true,
         extruded: false,
@@ -44,9 +88,10 @@ export default function SwissLandUseMap() {
         getLineColor: [255, 100, 0, 120],
         lineWidthMinPixels: 1,
       }),
-      new GeoJsonLayer({
+      new PolygonLayer<PolygonFeature>({
         id: "plant-agriculture-layer",
-        data: "/data/agriculture_plant_ch.geojson",
+        data: data.plantAg,
+        getPolygon: (d) => d.polygon,
         filled: true,
         stroked: true,
         extruded: false,
@@ -55,9 +100,10 @@ export default function SwissLandUseMap() {
         getLineColor: [255, 220, 0, 130],
         lineWidthMinPixels: 1,
       }),
-      new GeoJsonLayer({
+      new PolygonLayer<PolygonFeature>({
         id: "residential-layer",
-        data: "/data/bauzonen_residential_2022.geojson",
+        data: data.residential,
+        getPolygon: (d) => d.polygon,
         filled: true,
         stroked: true,
         extruded: false,
@@ -66,9 +112,8 @@ export default function SwissLandUseMap() {
         getLineColor: [57, 255, 20, 80],
         lineWidthMinPixels: 1,
       }),
-    ],
-    [],
-  );
+    ];
+  }, [data]);
 
   const legendContent = (
     <>

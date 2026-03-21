@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import DeckGL from "@deck.gl/react";
-import { GeoJsonLayer } from "@deck.gl/layers";
+import { PolygonLayer } from "@deck.gl/layers";
 import Map from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 
@@ -15,8 +15,34 @@ const INITIAL_VIEW_STATE = {
   bearing: 0,
 };
 
+type PolygonFeature = {
+  polygon: number[][][] | number[][][][];
+};
+
+/** Extract polygon coordinate rings from a GeoJSON geometry */
+function extractPolygons(geojson: any): PolygonFeature[] {
+  const features: PolygonFeature[] = [];
+  for (const feature of geojson.features ?? [geojson]) {
+    const geom = feature.geometry ?? feature;
+    if (geom.type === "Polygon") {
+      features.push({ polygon: geom.coordinates });
+    } else if (geom.type === "MultiPolygon") {
+      for (const poly of geom.coordinates) {
+        features.push({ polygon: poly });
+      }
+    }
+  }
+  return features;
+}
+
+type LayerData = {
+  agriculture: PolygonFeature[];
+  urban: PolygonFeature[];
+};
+
 export default function AgriculturalMap() {
   const [hintVisible, setHintVisible] = useState(true);
+  const [data, setData] = useState<LayerData | null>(null);
   const mapRef = useRef<HTMLDivElement>(null);
 
   // Hide hint on first real user interaction
@@ -29,11 +55,26 @@ export default function AgriculturalMap() {
     return () => events.forEach((e) => el.removeEventListener(e, hide));
   }, [hintVisible]);
 
-  const layers = useMemo(
-    () => [
-      new GeoJsonLayer({
+  // Fetch and parse all GeoJSON files
+  useEffect(() => {
+    Promise.all([
+      fetch("/data/agriculture_2017.geojson").then((r) => r.json()),
+      fetch("/data/urban_2017.geojson").then((r) => r.json()),
+    ]).then(([agGeo, urbanGeo]) => {
+      setData({
+        agriculture: extractPolygons(agGeo),
+        urban: extractPolygons(urbanGeo),
+      });
+    });
+  }, []);
+
+  const layers = useMemo(() => {
+    if (!data) return [];
+    return [
+      new PolygonLayer<PolygonFeature>({
         id: "agricultural-layer",
-        data: "/data/agriculture_2017.geojson",
+        data: data.agriculture,
+        getPolygon: (d) => d.polygon,
         filled: true,
         stroked: true,
         extruded: false,
@@ -42,9 +83,10 @@ export default function AgriculturalMap() {
         getLineColor: [255, 100, 0, 120],
         lineWidthMinPixels: 1,
       }),
-      new GeoJsonLayer({
+      new PolygonLayer<PolygonFeature>({
         id: "urban-layer",
-        data: "/data/urban_2017.geojson",
+        data: data.urban,
+        getPolygon: (d) => d.polygon,
         filled: true,
         stroked: true,
         extruded: false,
@@ -53,9 +95,8 @@ export default function AgriculturalMap() {
         getLineColor: [57, 255, 20, 80],
         lineWidthMinPixels: 1,
       }),
-    ],
-    [],
-  );
+    ];
+  }, [data]);
 
   const legendContent = (
     <>
