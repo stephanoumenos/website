@@ -1,18 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Protocol } from "pmtiles";
+import { registerPMTiles } from "../lib/pmtiles-buffer";
 
 const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
-
-// Register PMTiles protocol once
-let protocolRegistered = false;
-function ensureProtocol() {
-  if (protocolRegistered) return;
-  const protocol = new Protocol();
-  maplibregl.addProtocol("pmtiles", protocol.tile);
-  protocolRegistered = true;
-}
 
 export default function SwissLandUseMap() {
   const [hintVisible, setHintVisible] = useState(true);
@@ -21,7 +12,11 @@ export default function SwissLandUseMap() {
 
   useEffect(() => {
     if (!containerRef.current) return;
-    ensureProtocol();
+    registerPMTiles([
+      "/data/agriculture_animal_ch.pmtiles",
+      "/data/agriculture_plant_ch.pmtiles",
+      "/data/bauzonen_residential_2022.pmtiles",
+    ]);
 
     const map = new maplibregl.Map({
       container: containerRef.current,

@@ -1,18 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Protocol } from "pmtiles";
+import { registerPMTiles } from "../lib/pmtiles-buffer";
 
 const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
-
-// Register PMTiles protocol once
-let protocolRegistered = false;
-function ensureProtocol() {
-  if (protocolRegistered) return;
-  const protocol = new Protocol();
-  maplibregl.addProtocol("pmtiles", protocol.tile);
-  protocolRegistered = true;
-}
 
 export default function AgriculturalMap() {
   const [hintVisible, setHintVisible] = useState(true);
@@ -21,7 +12,10 @@ export default function AgriculturalMap() {
 
   useEffect(() => {
     if (!containerRef.current) return;
-    ensureProtocol();
+    registerPMTiles([
+      "/data/agriculture_2017.pmtiles",
+      "/data/urban_2017.pmtiles",
+    ]);
 
     const map = new maplibregl.Map({
       container: containerRef.current,
