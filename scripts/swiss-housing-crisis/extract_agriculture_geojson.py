@@ -41,8 +41,8 @@ PROJECT_ROOT = SCRIPT_DIR.parent.parent
 DATA_DIR = PROJECT_ROOT / "public" / "data"
 DOWNLOAD_DIR = SCRIPT_DIR / "downloads"
 
-SIMPLIFY_TOLERANCE = 200  # meters (CRS is EPSG:2056)
-MIN_AREA = 20000  # m² — drop small polygons (2 hectares)
+SIMPLIFY_TOLERANCE = 0  # meters (0 = lossless, no simplification)
+MIN_AREA = 0  # m² — keep all polygons (0 = lossless)
 
 # lnf_code ranges for classification
 ANIMAL_AG_CODES = {601, 611, 612, 613, 616, 617, 618, 635, 694, 930}
@@ -99,18 +99,19 @@ def extract_layer(gdf, name, output, filter_fn):
         print("  No features — skipping")
         return
 
-    print(f"  Simplifying (tolerance={SIMPLIFY_TOLERANCE}m)...")
-    subset["geometry"] = subset["geometry"].simplify(SIMPLIFY_TOLERANCE)
+    if SIMPLIFY_TOLERANCE > 0:
+        print(f"  Simplifying (tolerance={SIMPLIFY_TOLERANCE}m)...")
+        subset["geometry"] = subset["geometry"].simplify(SIMPLIFY_TOLERANCE)
 
-    print(f"  Dropping polygons < {MIN_AREA} m²...")
-    subset = subset[subset.geometry.area >= MIN_AREA]
-    print(f"  {len(subset)} features remaining")
+    if MIN_AREA > 0:
+        print(f"  Dropping polygons < {MIN_AREA} m²...")
+        subset = subset[subset.geometry.area >= MIN_AREA]
+        print(f"  {len(subset)} features remaining")
 
     # Fix invalid geometries before dissolve
     print("  Fixing invalid geometries...")
     subset["geometry"] = subset["geometry"].buffer(0)
 
-    # Need a canton column for per-canton dissolve — extract from filename via index
     # Use a chunked approach: dissolve doesn't scale to 200k+ polygons at once
     print("  Dissolving (chunked, 10k features at a time)...")
     from shapely.ops import unary_union
@@ -131,16 +132,11 @@ def extract_layer(gdf, name, output, filter_fn):
     print("  Reprojecting to EPSG:4326...")
     subset = subset.to_crs(epsg=4326)
 
-    # Post-reproject simplification to reduce vertex count for browser rendering
-    # 0.0005° ≈ 40m at Swiss latitudes — invisible at the zoom levels we use
-    print("  Final simplification (0.0005°)...")
-    subset["geometry"] = subset["geometry"].simplify(0.0005)
-
     subset = subset[["geometry"]]
 
     output.parent.mkdir(parents=True, exist_ok=True)
     print(f"  Writing {output}...")
-    subset.to_file(output, driver="GeoJSON", coordinate_precision=3)
+    subset.to_file(output, driver="GeoJSON", coordinate_precision=5)
 
     size_mb = os.path.getsize(output) / (1024 * 1024)
     print(f"  Done! {size_mb:.1f} MB\n")

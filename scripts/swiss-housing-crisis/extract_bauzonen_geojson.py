@@ -34,7 +34,7 @@ DATA_DIR = PROJECT_ROOT / "public" / "data"
 
 INPUT = SCRIPT_DIR / "ch.are.bauzonen.gpkg"
 LAYER = "ch.are.bauzonen"
-SIMPLIFY_TOLERANCE = 100  # meters (CRS is EPSG:2056)
+SIMPLIFY_TOLERANCE = 0  # meters (0 = lossless, no simplification)
 
 # Residential zones: Wohnzonen + Mischzonen + Zentrumszonen
 RESIDENTIAL_CODES = [11, 13, 14]
@@ -55,32 +55,27 @@ def extract_layer(name, output, column, values):
     gdf = gpd.read_file(INPUT, layer=LAYER, where=where)
     print(f"  {len(gdf)} features loaded")
 
-    print(f"  Simplifying (tolerance={SIMPLIFY_TOLERANCE}m)...")
-    gdf["geometry"] = gdf["geometry"].simplify(SIMPLIFY_TOLERANCE)
+    if SIMPLIFY_TOLERANCE > 0:
+        print(f"  Simplifying (tolerance={SIMPLIFY_TOLERANCE}m)...")
+        gdf["geometry"] = gdf["geometry"].simplify(SIMPLIFY_TOLERANCE)
 
-    # Drop tiny polygons (< 5000 m²) before dissolve to reduce complexity
-    print("  Dropping tiny polygons (< 5000 m²)...")
-    gdf = gdf[gdf.geometry.area >= 5000]
-    print(f"  {len(gdf)} features remaining after filter")
+    print("  Fixing invalid geometries...")
+    gdf["geometry"] = gdf["geometry"].buffer(0)
 
     print("  Dissolving...")
     gdf = gdf.dissolve()
 
-    # Buffer by 0 to fix any topology issues, then simplify again
     print("  Cleaning topology...")
     gdf["geometry"] = gdf["geometry"].buffer(0)
 
     print("  Reprojecting to EPSG:4326...")
     gdf = gdf.to_crs(epsg=4326)
 
-    print("  Final simplification (0.0005°)...")
-    gdf["geometry"] = gdf["geometry"].simplify(0.0005)
-
     gdf = gdf[["geometry"]]
 
     output.parent.mkdir(parents=True, exist_ok=True)
     print(f"  Writing {output}...")
-    gdf.to_file(output, driver="GeoJSON", coordinate_precision=3)
+    gdf.to_file(output, driver="GeoJSON", coordinate_precision=5)
 
     size_mb = os.path.getsize(output) / (1024 * 1024)
     print(f"  Done! {size_mb:.1f} MB")
