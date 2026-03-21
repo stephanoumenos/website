@@ -1,195 +1,491 @@
 ---
-title: "Switzerland's Housing Crisis and the Agricultural Land Question"
-description: "Switzerland devotes vast stretches of land to livestock farming while housing costs spiral out of control."
+title: "The Cost of Swiss Livestock"
+description: "87% of Swiss farmland serves animal agriculture. The country's net food self-sufficiency: 46%. The cost to every household: CHF 2,300 per year."
 pubDate: 2026-03-18
-tags: ["switzerland", "housing", "agriculture", "policy"]
+tags: ["switzerland", "agriculture", "food-security", "subsidies", "policy"]
 draft: true
 ---
 
 import SwissLandUseMap from "../../components/SwissLandUseMap";
 
-{/* TODO: This post is a work-in-progress. Research notes below. */}
+Switzerland devotes 35% of its surface to agriculture. Of that agricultural land, [87% serves livestock](https://www.agrarbericht.ch/de/produktion/pflanzliche-produktion/flaechennutzung) — permanent grassland, alpine pastures, and feed crops. The remaining 13%, amounting to 4.4% of the country, produces food consumed directly by humans.
+
+The outcome: Switzerland produces [106% of its dairy needs and 96% of its beef](https://2024.agrarbericht.ch/de/markt/marktentwicklungen/selbstversorgungsgrad), but [49% of its vegetables, 49% of its cereals, and 23% of its plant oils](https://2024.agrarbericht.ch/de/markt/marktentwicklungen/selbstversorgungsgrad). Net of imported animal feed, the country's [self-sufficiency rate is 46%](https://2024.agrarbericht.ch/de/markt/marktentwicklungen/selbstversorgungsgrad).
+
+The cost of maintaining this arrangement, by one [comprehensive estimate](https://www.avenir-suisse.ch/en/publication/swiss-agriculture-continues-to-enjoy-growing-economic-privileges/), is CHF 20.7 billion per year.
+
+## Land use
 
 <SwissLandUseMap client:visible />
 
-## Research Notes
+Switzerland covers [41,285 km²](https://www.bfs.admin.ch/bfs/de/home/statistiken/raum-umwelt/bodennutzung-bedeckung/landwirtschaftsflaechen.html). A quarter is rock, ice, and water. A third is forest. The remainder is where [9 million people](https://www.bfs.admin.ch/asset/en/34447375) share space with [1.5 million cattle, 1.3 million pigs, and 13.3 million poultry](https://www.agrarbericht.ch/de/produktion/tierische-produktion/nutztierhalter-und-nutztierbestaende).
+
+| Category                                                                                                                                                         | Area (km²) | Share     |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------- |
+| <span className="inline-flex items-center gap-2"><span className="size-2 rounded-full bg-red-500 dark:bg-red-400 shrink-0"></span>**Grassland and alpine pastures**</span> | **10,042** | **24.3%** |
+| <span className="inline-flex items-center gap-2"><span className="size-2 rounded-full bg-red-500 dark:bg-red-400 shrink-0"></span>**Livestock feed crops**</span> | **2,694** | **6.5%** |
+| Other farming (food for humans)                                                                                                                                  | 1,796      | 4.4%      |
+| Forest                                                                                                                                                           | 12,922     | 31.3%     |
+| Rock, ice, and water                                                                                                                                             | 10,569     | 25.6%     |
+| <span className="inline-flex items-center gap-2"><span className="size-2 rounded-full bg-emerald-500 dark:bg-emerald-400 shrink-0"></span>**Residential**</span> | **1,078**  | **2.6%**  |
+| Other built-up                                                                                                                                                   | 2,184      | 5.3%      |
+
+Animal agriculture — grassland, alpine pastures, and the [60% of arable land](https://www.agrarbericht.ch/de/produktion/pflanzliche-produktion/flaechennutzung) used for feed — occupies 12,736 km², or 30.8% of the country. The area growing food directly for humans — bread wheat, potatoes, sugar beet, vegetables, fruit, wine — is 1,796 km². Residential zones account for [1,078 km²](https://www.are.admin.ch/de/bauzonen). Over [80%](https://www.are.admin.ch/de/bauzonen) of that is already built on.
+
+## Food security
+
+The largest single category of Swiss direct payments to farmers is _Versorgungssicherheitsbeiträge_ — food supply security contributions — at [CHF 912 million in 2024](https://www.agrarbericht.ch/de/politik/direktzahlungen/finanzielle-mittel-fuer-direktzahlungen). The stated purpose of this expenditure, and of much of Swiss agricultural policy, is to ensure the country can feed itself in a crisis.
+
+By the government's own data, the system does not achieve this. Switzerland's [gross self-sufficiency rate is 53%](https://2024.agrarbericht.ch/de/markt/marktentwicklungen/selbstversorgungsgrad). Net of the grain and soya that Swiss livestock consume but Swiss farms do not produce, it falls to [46%](https://2024.agrarbericht.ch/de/markt/marktentwicklungen/selbstversorgungsgrad). For plant-based staples that could be grown domestically, the gaps are larger: 49% for vegetables, 49% for cereals, 23% for plant oils.
+
+The reason is visible in the land allocation. Of Switzerland's roughly 396,000 hectares of arable cropland, [60%](https://www.agrarbericht.ch/de/produktion/pflanzliche-produktion/flaechennutzung) grows animal feed — silage maize, feed grain, and temporary grass leys — rather than food for human consumption. The system generates surpluses of dairy and meat, categories in which Switzerland already exceeds its own needs, while the country imports the majority of its grains, oils, and vegetables.
+
+A [2025 study by ETH Zurich and FiBL](https://www.srf.ch/news/dialog/lebensmittelproduktion-schweizer-landwirtschaft-koennte-die-gesamte-bevoelkerung-ernaehren) concluded that Switzerland could achieve full food self-sufficiency — genuine _Versorgungssicherheit_ — without imports, if arable land currently growing feed were converted to crops for human consumption. The federal government's own research institute, Agroscope, [modelled](https://www.agrarforschungschweiz.ch/en/2023/12/how-much-livestock-does-switzerland-need-for-optimal-land-use/) the optimal livestock population under the Climate Strategy 2050 and arrived at 42% fewer cattle and 65% fewer pigs. A [2024 paper in _Communications Earth & Environment_](https://www.nature.com/articles/s43247-023-01139-z) identified 181,479 hectares of land suitable for grain legume production — much of it currently under fodder maize — capable of replacing roughly 41% of Switzerland's animal protein.
+
+The system is justified by food security. The research indicates it undermines food security.
+
+## The subsidy structure
+
+The federal government paid [CHF 2.788 billion](https://www.agrarbericht.ch/de/politik/direktzahlungen/finanzielle-mittel-fuer-direktzahlungen) in _Direktzahlungen_ to farmers in 2024. Parliament has committed [CHF 14.2 billion](https://www.agrarbericht.ch/de/politik/uebersicht/bundesausgaben-fuer-landwirtschaft-und-ernaehrung) for the period 2026–2029. Roughly [four-fifths](https://www.foraus.ch/en/posts/the-need-for-transparency-in-swiss-agriculture/) flows to animal production.
+
+Direct payments account for only part of total support. The OECD's [2025 evaluation](https://www.oecd.org/en/publications/2025/10/agricultural-policy-monitoring-and-evaluation-2025_354e7040/full-report/switzerland_9badc265.html) puts Switzerland's total Producer Support Estimate — including both budgetary transfers and the price effects of trade barriers — at **40 to 49%** of gross farm receipts. The OECD average is 13%. The EU average is roughly 20%. Among wealthy democracies, only Norway and Iceland are comparable.
+
+The trade barriers alone are substantial. Swiss agricultural tariffs average [30.4%](https://www.wto.org/english/res_e/statis_e/daily_update_e/tariff_profiles/ch_e.pdf). On dairy — a product of which Switzerland already produces [106%](https://2024.agrarbericht.ch/de/markt/marktentwicklungen/selbstversorgungsgrad) of domestic demand — tariffs reach [137.7%](https://www.wto.org/english/res_e/statis_e/daily_update_e/tariff_profiles/ch_e.pdf). Domestic producer prices are [47% above world reference levels](https://www.oecd.org/en/publications/2025/10/agricultural-policy-monitoring-and-evaluation-2025_354e7040/full-report/switzerland_9badc265.html). The consumer pays for this at the checkout.
+
+Average agricultural income per farm in 2024 was [CHF 81,700](https://www.agroscope.admin.ch/agroscope/en/home/news/newsroom/2025/11-18_landwirtschaftliches-einkommen-2024.html). Average direct payments per farm: CHF 79,000. For the typical Swiss farm, government transfers approximate the total income. The sector contributes [0.63% of GDP](https://www.eda.admin.ch/aboutswitzerland/en/home/wirtschaft/taetigkeitsgebiete/landwirtschaft.html) and employs [1.9% of the workforce](https://www.bfs.admin.ch/bfs/en/home/statistics/agriculture-forestry/farming.html) on approximately 48,000 farms — down from 80,000 three decades ago.
+
+Avenir Suisse's [comprehensive accounting](https://www.avenir-suisse.ch/en/publication/swiss-agriculture-continues-to-enjoy-growing-economic-privileges/) of the full economic cost — direct subsidies, trade protection, environmental damage, foregone export revenue — arrives at **CHF 20.7 billion per year**: [CHF 2,300 per household](https://www.avenir-suisse.ch/en/publication/swiss-agriculture-continues-to-enjoy-growing-economic-privileges/). Over [70%](https://www.foraus.ch/en/posts/the-need-for-transparency-in-swiss-agriculture/) of agricultural subsidies are assessed as potentially harmful to biodiversity.
+
+## Environmental damage
+
+Swiss agriculture accounts for [92% of national ammonia emissions](https://www.agrarforschungschweiz.ch/en/2022/11/ammonia-emissions-from-agriculture-in-switzerland-for-1990-to-2020/). [93%](https://www.agrarforschungschweiz.ch/en/2022/11/ammonia-emissions-from-agriculture-in-switzerland-for-1990-to-2020/) of agricultural ammonia comes from livestock; cattle alone are responsible for 77%. Despite decades of targets, emissions have been [effectively stagnant since 2004](https://www.agrarforschungschweiz.ch/en/2022/11/ammonia-emissions-from-agriculture-in-switzerland-for-1990-to-2020/). Nitrogen [critical loads are exceeded](https://www.bafu.admin.ch/bafu/en/home/topics/air/info-specialists/air-quality-in-switzerland/nitrogen-containing-air-pollutants-affect-biodiversity.html) across large parts of the country, degrading forests, wetlands, and alpine grasslands. [70,000 tonnes of nitrogen](https://www.bafu.admin.ch/bafu/en/home/topics/chemicals/publications-studies/publications/nitrogen-flows-switzerland-2020.html) entered Swiss water bodies in 2020; the federal target to halve agricultural nitrogen inputs relative to 1985 has not been met. Agriculture also contributes [16% of Swiss greenhouse gas emissions](https://www.bafu.admin.ch/bafu/en/home/topics/climate/data/greenhouse-gas-inventory/agriculture.html), predominantly methane and nitrous oxide from livestock.
+
+## Housing
+
+The land allocation has direct consequences for the housing market. Swiss spatial planning law protects agricultural land through the [Raumplanungsgesetz](https://www.fedlex.admin.ch/eli/cc/1979/1573_1573_1573/de) (RPG), [revised in 2013](https://www.are.admin.ch/de/rpg1), which caps building zones at 15 years of projected demand, and the [Sachplan Fruchtfolgeflächen](https://www.are.admin.ch/de/fff), which protects [445,680 hectares](https://www.are.admin.ch/de/fff-statistik) of prime soil with a margin of just [7,220 hectares](https://www.are.admin.ch/de/fff-statistik) above the federal minimum. Since the RPG revision, [173 municipalities](https://www.schweizerbauer.ch/artikel/390-ha-bauland-zurueck-in-landwirtschaftszone) have rezoned 390 hectares of building land back to agriculture. Between 2009 and 2018, [90%](https://www.bfs.admin.ch/asset/de/19365051) of new settlement area was carved from former farmland.
+
+Housing is confined to [2,343 km² of building zones](https://www.are.admin.ch/de/bauzonen), over 80% already built. The national vacancy rate has fallen to [1.00%](https://www.bfs.admin.ch/asset/en/36153137) — its lowest in over a decade. In Zurich it is [0.10%](https://www.stadt-zuerich.ch/de/aktuell/medienmitteilungen/2025/08/leerwohnungsziffer-bleibt-mit-01-prozent-auf-sehr-tiefem-niveau.html). Building permits have [declined more than 30%](https://www.bwo.admin.ch/de/nsb?id=104311) since 2016. Asking rents have risen [4.7%, 3.2%, and 2.3%](https://swissmarketplace.group/media-release/mietindex-12-2025-en) in three consecutive years.
+
+The [Swiss constitution](https://www.fedlex.admin.ch/eli/cc/1999/404/en) mandates both agricultural food security (Article 104) and the promotion of housing (Article 108). Voters have been asked about agricultural reform repeatedly — the [_Massentierhaltungsinitiative_](https://www.admin.ch/gov/en/start/documentation/votes/20220925/factory-farming-initiative.html) in 2022, the [_Trinkwasserinitiative_](https://www.admin.ch/gov/en/start/documentation/votes/20210613/popular-initiative-for-clean-drinking-water-and-healthy-food.html) in 2021, the [_Biodiversitätsinitiative_](https://www.admin.ch/gov/en/start/documentation/votes/20240922/biodiversity-initiative.html) in 2024 — and said no each time, by margins above 60%. None asked whether the current land allocation serves the food security it is meant to guarantee.
+
+---
+
+## Appendix: data sources and methodology
+
+### Land use
+
+The land use figures are derived from two datasets:
+
+1. **[Arealstatistik 2013/18](https://www.bfs.admin.ch/bfs/de/home/statistiken/raum-umwelt/bodennutzung-bedeckung/landwirtschaftsflaechen.html)** — BFS land use survey from aerial photographs. Provides the top-level breakdown: agriculture (35.2%), forest (31.3%), settlement (7.9%), unproductive (25.6%), and the within-agriculture split into arable (30.9%), permanent grassland (34.4%), and alpine pastures (34.7%).
+2. **[Agrarbericht 2025](https://www.agrarbericht.ch/de/produktion/pflanzliche-produktion/flaechennutzung)** — BLW agricultural report. Used for the feed/food split of arable land. The 60% feed share counts _Kunstwiesen_ (temporary grass leys on arable-capable land), silage maize, and feed grain. A narrower definition excluding Kunstwiesen yields roughly 43%.
+
+The livestock land figure (12,736 km²) is calculated as: all permanent grassland + all alpine pastures + 60% of arable land. This slightly overstates the case, since some mountain grassland is too steep for alternative use, but equally understates it by excluding the residential inaccessibility of alpine pastures from the ratio comparison.
+
+The residential figure (1,078 km²) comes from the **[ARE Bauzonenstatistik 2022](https://www.are.admin.ch/de/bauzonen)**: 234,337 hectares of total building zones, of which 46% are _Wohnzonen_.
+
+The interactive map combines **[Landwirtschaftliche Nutzungsflächen](https://www.geodienste.ch/services/lwb_nutzungsflaechen)** (agricultural parcels, geodienste.ch) and **[Bauzonen Schweiz](https://opendata.swiss/en/dataset/bauzonen-schweiz-harmonisiert)** (harmonised building zones, KGK-CGC), reprojected to WGS84.
+
+### Subsidies and economic cost
+
+- **Direktzahlungen:** [BLW Agrarbericht 2025](https://www.agrarbericht.ch/de/politik/direktzahlungen/finanzielle-mittel-fuer-direktzahlungen) (2024 data).
+- **OECD PSE:** [Agricultural Policy Monitoring and Evaluation 2025](https://www.oecd.org/en/publications/2025/10/agricultural-policy-monitoring-and-evaluation-2025_354e7040/full-report/switzerland_9badc265.html) (2022–2024).
+- **Tariffs:** [WTO Switzerland Tariff Profile 2025](https://www.wto.org/english/res_e/statis_e/daily_update_e/tariff_profiles/ch_e.pdf).
+- **Total economic cost:** [Avenir Suisse, _Privilegienregister_ (2020)](https://www.avenir-suisse.ch/en/publication/swiss-agriculture-continues-to-enjoy-growing-economic-privileges/).
+
+### Environment
+
+- **Ammonia:** [Agrarforschung Schweiz](https://www.agrarforschungschweiz.ch/en/2022/11/ammonia-emissions-from-agriculture-in-switzerland-for-1990-to-2020/) (1990–2020).
+- **Nitrogen flows:** [BAFU, _Nitrogen Flows in Switzerland 2020_](https://www.bafu.admin.ch/bafu/en/home/topics/chemicals/publications-studies/publications/nitrogen-flows-switzerland-2020.html).
+- **Greenhouse gases:** [BAFU inventory](https://www.bafu.admin.ch/bafu/en/home/topics/climate/data/greenhouse-gas-inventory/agriculture.html).
+
+### Housing
+
+- **Vacancy rates:** [BFS Leerwohnungszählung 2025](https://www.bfs.admin.ch/asset/en/36153137).
+- **Supply shortfall:** [Federal Council report on housing (February 2025)](https://www.bwo.admin.ch/de/nsb?id=104311).
+- **Asking rents:** [SMG Mietindex](https://swissmarketplace.group/media-release/mietindex-12-2025-en) (2023–2025).
+- **Property prices:** [SNB indices](https://data.snb.ch/en/topics/uvo/cube/plimoinchq) (Q1 2025).
+
+{/*
+
+========================================================================
+FULL RESEARCH NOTES AND SOURCE ARCHIVE (preserved for reference)
+========================================================================
+
+The article follows the same structure as the Dutch piece:
+1. Opening — housing crisis hook
+2. The numbers — map + land use table
+3. The spatial planning bottleneck — RPG, Fruchtfolgeflächen, rezoning paradox
+4. Following the money — Direktzahlungen, OECD PSE, Avenir Suisse, border protection
+5. The environmental bill — ammonia, GHG, critical loads, biodiversity
+6. The alternative — dietary shift studies
+7. Constitutional question — Art. 104 vs Art. 108
+
+========================================================================
+§1. THE HOUSING CRISIS — PRIMARY SOURCES
+========================================================================
+
+VACANCY RATES
+- BFS Leerwohnungszählung 2025: 48,455 vacant dwellings, vacancy rate 1.00% (June 2025).
+  Fifth consecutive annual decline since peak of 1.72% in 2020. Lowest since 2013.
+  https://www.bfs.admin.ch/asset/en/36153137
+- BFS Leerwohnungszählung 2024: 51,974 vacant, 1.08%.
+  https://www.bfs.admin.ch/asset/de/32386422
+- Zurich city: 0.10% vacancy rate (235 apartments for ~440,000 residents), August 2025.
+  https://www.stadt-zuerich.ch/de/aktuell/medienmitteilungen/2025/08/leerwohnungsziffer-bleibt-mit-01-prozent-auf-sehr-tiefem-niveau.html
+- Geneva canton: 0.34% (lowest cantonal rate in Switzerland), 2025.
+- Bern city: 0.44%, 2025.
+  https://www.bern.ch/mediencenter/medienmitteilungen/aktuell_sta/leerwohnungsziffer-bleibt-unveraendert-bei-0-44-prozent
+- Basel-Stadt: 0.9%, 2025.
+  https://www.bs.ch/medienmitteilungen/pd/2025-mehr-leerstehende-wohnungen-weniger-leerstehende-geschaeftsflaechen
+
+HOUSING SUPPLY SHORTFALL
+- Federal Council report on rent development and housing shortage (February 2025):
+  Annual demand ~50,000 dwellings. Only ~40,000 built in 2024. Shortfall: 7,000–10,000/year.
+  Building permits for new construction declined over 30% between 2016 and 2023.
+  2023 permit level comparable to 2002 levels.
+  https://www.bwo.admin.ch/de/nsb?id=104311
+- BWO Aktionsplan Wohnungsknappheit (February 2024): 30+ measures recommended.
+  https://www.bwo.admin.ch/de/aktionsplan-wohnungsknappheit
+  PDF: https://www.newsd.admin.ch/newsd/message/attachments/86057.pdf
+- BWO/ARE study on objections/appeals (2024): 60% of professionals say Einsprachen
+  are a major obstacle; 80% say they delay housing reaching market; 71% say they
+  make housing more expensive.
+  https://www.bwo.admin.ch/de/einsprachen-und-rekurse
+
+HOUSING COSTS
+- SMG Mietindex (asking rents for new tenancies):
+  2023: +4.7% YoY. 2024: +3.2% (Zurich +4.5%, Lucerne +9.1%). 2025: +2.3%.
+  https://swissmarketplace.group/media-release/mietindex-12-2025-en
+  https://swissmarketplace.group/media-release/mietindex-12-2024/
+- BFS Mietpreisindex (existing tenancies): long time series 1939–Jan 2026.
+  https://www.bfs.admin.ch/bfs/de/home/statistiken/preise/mieten/index.html
+- BFS Mietpreisstrukturerhebung 2024: avg 4-room apartment CHF 1,622/month.
+  New-build 4-room: CHF 2,138. Same tenant 20+ years: CHF 1,313.
+  64% of Swiss households rent.
+  https://www.bfs.admin.ch/bfs/de/home/statistiken/preise/mieten/struktur.html
+- SNB Real Estate Price Indices: apartments +4.6% YoY in Q1 2025. Houses +3.6%.
+  https://data.snb.ch/en/topics/uvo/cube/plimoinchq
+- SNB Financial Stability Report 2025: residential price-to-rent ratio
+  significantly above long-term average.
+  https://www.snb.ch/public/asset/en/www-snb-ch/publications/financial-stability-report/2025/stabrep_2025/publications0_en/stabrep_2025.en.pdf
+
+POPULATION PRESSURE
+- BFS: Switzerland reached 9,048,900 at end 2024. Net immigration: 83,392.
+  Projected to reach 10.5 million by 2055.
+  https://www.bfs.admin.ch/asset/en/34447375
+  https://www.bfs.admin.ch/bfs/en/home/news/special-coverage.gnpdetail.2025-0560.html
+
+========================================================================
+§2. THE NUMBERS — LAND USE PRIMARY SOURCES
+========================================================================
+
+TOTAL LAND USE (BFS Arealstatistik 2013/18)
+- Switzerland total area: 41,285 km².
+- Agricultural land: ~35% = ~14,450 km² (1,445,000 ha).
+- Settlement areas: ~8% = ~3,271 km².
+- Forest and woodland: ~32%.
+- Unproductive areas (rock, ice, water): ~25%.
+- 90% of new settlement area between 2009–2018 was carved from former agricultural land.
+  https://www.bfs.admin.ch/bfs/de/home/statistiken/raum-umwelt/bodennutzung-bedeckung/landwirtschaftsflaechen.html
+  Publication: https://www.bfs.admin.ch/asset/de/19365051
+
+AGRICULTURAL LAND BREAKDOWN (BFS Strukturerhebung + BLW Agrarbericht 2025)
+- LN (landwirtschaftliche Nutzfläche, excl. Sömmerung): ~1,042,000 ha.
+  - Naturwiesen & Weiden (permanent grassland): ~604,000 ha (58% of LN)
+  - Ackerfläche (arable incl. Kunstwiesen): ~396,000 ha (38% of LN)
+  - Dauerkulturen (vineyards, orchards): ~21,000 ha (4% of LN)
+- Sömmerungsgebiet (alpine summer pastures): ~514,000 ha.
+- Total agricultural land: ~1,556,000 ha.
+  https://www.bfs.admin.ch/news/de/2024-0391
+  https://www.agrarbericht.ch/de/produktion/pflanzliche-produktion/flaechennutzung
+
+FEED VS. FOOD ON ARABLE LAND
+- ~60% of arable land grows animal feed (Kunstwiesen ~120,000 ha, Silomais ~47,000 ha,
+  Futtergetreide ~40,000–60,000 ha). ~40% grows food for direct human consumption.
+  https://www.agrarbericht.ch/de/produktion/pflanzliche-produktion/flaechennutzung
+  https://2022.agrarbericht.ch/de/produktion/standortangepasste-produktion-neu/flaechen-und-nahrungsmittelkonkurrenz
+  https://www.sbv-usp.ch/de/agristat-aktuell-08-25-schaetzung-der-schweizer-ackerflaeche-2025
+  Forage context: https://www.eagff.ch/die-schweiz-ein-grasland/bedeutung-futterbau/flaechen/flaechenanteile
+
+THE KEY RATIO: LIVESTOCK LAND VS. RESIDENTIAL LAND
+- Permanent grassland (~604,000 ha) + 60% of arable land (~237,000 ha)
+  = ~841,000 ha of LN serving livestock (81% of LN, excl. Sömmerung).
+- Including Sömmerung (100% livestock): ~1,355,000 of ~1,556,000 ha (87%).
+- Residential zones (Wohnzonen): ~107,795 ha (46% of 234,337 ha total Bauzonen).
+- Ratio: livestock land is ~12.6× residential zones (incl. Sömmerung),
+  ~7.8× (excl. Sömmerung). Even just permanent grassland alone is 5.6× residential zones.
+
+BUILDING ZONES (ARE Bauzonenstatistik 2022)
+- Total Bauzonen: 234,337 ha (2,343 km²).
+- Wohnzonen: 46% = ~107,795 ha (~1,078 km²).
+- Arbeitszonen: 13%. Zentrumszonen: 11%. Öffentliche Nutzungen: 11%. Mischzonen: 10%.
+- >80% built. Unbuilt: 10–16% (~23,400–37,500 ha).
+  Could theoretically accommodate 0.9–1.6 million additional residents.
+- Area per inhabitant: 282 m².
+  https://www.are.admin.ch/de/bauzonen
+  PDF: https://www.are.admin.ch/dam/are/de/dokumente/grundlagen/dokumente/bzs_2022.pdf.download.pdf/Bauzonenstatistik%20Schweiz%202022.pdf
+
+LIVESTOCK NUMBERS (BLW Agrarbericht 2025, data year 2024)
+- Cattle: ~1,537,000 (incl. ~676,000 dairy cows). +0.6% vs 2023.
+- Pigs: ~1,277,000. -3.6% vs 2023.
+- Poultry: ~13,300,000. Slight increase.
+- Sheep: ~340,000 (est.). Goats: ~80,000 (est.).
+- 39,572 livestock farms, 14,437 poultry farms (2024).
+  https://www.agrarbericht.ch/de/produktion/tierische-produktion/nutztierhalter-und-nutztierbestaende
+  https://tierstatistik.identitas.ch/de/cattle.html
+- Context: 1 cow per 6 people; 1.5 poultry birds per person.
+
+========================================================================
+§3. THE SPATIAL PLANNING BOTTLENECK — PRIMARY SOURCES
+========================================================================
+
+RAUMPLANUNGSGESETZ (RPG) REVISION 2014
+- RPG 1: approved by popular vote March 3, 2013; entered force May 1, 2014.
+- Art. 15 RPG: building zones must correspond to 15-year anticipated need.
+  Oversized zones must be reduced. Cantons had 5 years to adapt Richtpläne.
+  Construction zone moratorium during adaptation period.
+- Mehrwertabgabe (value capture levy): ≥20% when ag land rezoned to building land.
+- Siedlungsentwicklung nach innen (inward development) mandated over sprawl.
+- All cantons adapted their Richtpläne by October 2022.
+  https://www.are.admin.ch/de/rpg1
+  Law text: https://www.fedlex.admin.ch/eli/cc/1979/1573_1573_1573/de
+
+REZONING BACK TO AGRICULTURE (AUSZONUNG)
+- 173 municipalities have converted 390 hectares of building land back to
+  agricultural zones — while vacancy rates are at their lowest since 2013.
+  https://www.schweizerbauer.ch/artikel/390-ha-bauland-zurueck-in-landwirtschaftszone
+  Context: https://www.uvek.admin.ch/dam/de/sd-web/W7yPWa5s4UAL/bauzonen.pdf
+
+FRUCHTFOLGEFLÄCHEN (CROP ROTATION AREAS)
+- 445,680 ha of FFF currently secured (~11% of total land area).
+- Federal minimum requirement: 438,460 ha. Surplus: only 7,220 ha.
+- Revised Sachplan FFF approved by Federal Council May 8, 2020.
+- Purpose: ensure food security during severe supply crises.
+- FFF are under pressure from settlement expansion, energy infrastructure, recreation.
+  https://www.are.admin.ch/de/fff
+  https://www.are.admin.ch/de/fff-statistik
+  Sachplan PDF: https://www.are.admin.ch/dam/are/de/dokumente/sachplan_fruchtfolgeflaechenfff.pdf
+
+RPG 2 (SECOND REVISION)
+- Parliament passed RPG 2 on September 29, 2023 (indirect counterproposal to
+  Landschaftsinitiative). Stabilizes soil consumption outside building zones
+  (max 2% increase in buildings/sealed land). Enters force January 1 / July 1, 2026.
+  https://www.are.admin.ch/de/rpg2
+
+========================================================================
+§4. FOLLOWING THE MONEY — PRIMARY SOURCES
+========================================================================
+
+DIREKTZAHLUNGEN (DIRECT PAYMENTS)
+- Total 2024: CHF 2,788 million.
+  Versorgungssicherheit (supply security): 912M. Produktionssysteme: 693M.
+  Kulturlandschaft: 536M. Biodiversität: 433M. Landschaftsqualität: 147M.
+  Übergangsbeitrag: 72M. Ressourceneffizienz: 5M.
+  https://www.agrarbericht.ch/de/politik/direktzahlungen/finanzielle-mittel-fuer-direktzahlungen
+  https://www.blw.admin.ch/de/direktzahlungen-uebersicht
+
+- Total federal agricultural budget: ~CHF 3.5–3.8 billion/year.
+  Parliament approved 2026–2029 allocation: CHF 14.2 billion (4-year envelope).
+  https://www.agrarbericht.ch/de/politik/uebersicht/bundesausgaben-fuer-landwirtschaft-und-ernaehrung
+
+- ~80% of subsidies go to animal production.
+  Source: Foraus, citing NZZ analysis of federal data.
+  https://www.foraus.ch/en/posts/the-need-for-transparency-in-swiss-agriculture/
+  Academic: https://www.mdpi.com/2071-1050/15/13/10428
+  (Linking Subsidies for Agriculture and Food to Dietary Styles, MDPI Sustainability 2023)
+
+- >70% of subsidies potentially, partially, or fully harmful to biodiversity.
+  Source: Gubler (2020), cited by Foraus.
+
+OECD PRODUCER SUPPORT ESTIMATE (PSE)
+- Swiss %PSE: 40–49% of gross farm receipts (2022–2024), among highest in OECD.
+- OECD average: ~13%. EU average: ~20%. Netherlands: ~10–15%.
+- Domestic producer prices 47% above border reference prices (2022–24).
+- Market Price Support (MPS): 44% of total producer support (2022–24), down from 62% in 2000–02.
+  https://www.oecd.org/en/publications/2025/10/agricultural-policy-monitoring-and-evaluation-2025_354e7040/full-report/switzerland_9badc265.html
+  Data explorer: https://data-explorer.oecd.org/vis?lc=en&df%5Bds%5D=dsDisseminateFinalDMZ&df%5Bid%5D=DSD_AGR_POLIND@DF_PSE&df%5Bag%5D=OECD.TAD.ARP&df%5Bvs%5D=1.2
+
+BORDER PROTECTION
+- Average tariff on agricultural goods: 30.4%.
+- Tariffs on dairy: up to 137.7%.
+  https://www.wto.org/english/res_e/statis_e/daily_update_e/tariff_profiles/ch_e.pdf
+
+AVENIR SUISSE: TOTAL ECONOMIC COST
+- Total cost of Swiss agricultural policy: CHF 20.7 billion/year.
+  Environmental costs: 37% (~7.7bn). Taxpayers: 23% (~4.8bn).
+  Business (missed export opportunities): 22% (~4.5bn). Consumers: 18% (~3.7bn).
+- Cost per household: ~CHF 2,300/year (~1,300 via taxes, ~1,000 via higher food prices).
+- CHF 1.8 million per hour. ~CHF 400,000 per farm per year (all economic costs).
+  https://www.avenir-suisse.ch/en/publication/swiss-agriculture-continues-to-enjoy-growing-economic-privileges/
+  https://www.avenir-suisse.ch/privilegienregister-der-schweizer-landwirtschaft-2020/
+  Original 2018 study: https://cdn.avenir-suisse.ch/production/uploads/2018/09/2018_avenir_debatte_agrarpolitik_mit_zukunft.pdf
+
+FARM INCOME AND GDP
+- Average agricultural income per farm (2024): CHF 81,700. Direct payments: ~CHF 79,000.
+  Work income per family labour unit: CHF 59,100.
+  https://www.agroscope.admin.ch/agroscope/en/home/news/newsroom/2025/11-18_landwirtschaftliches-einkommen-2024.html
+- Agriculture's share of GDP: 0.63% (2024). ~160,000 employed (~1.9% of workforce).
+  ~48,000 farms (down from 80,000 in 1996).
+  https://www.eda.admin.ch/aboutswitzerland/en/home/wirtschaft/taetigkeitsgebiete/landwirtschaft.html
+
+SELF-SUFFICIENCY RATES (Agrarbericht 2024, data year 2022)
+- Gross: 53%. Net (excl. imported feed): 46%.
+- Dairy: 106% (surplus). Beef: 96%. Pork: 96%. Poultry: 60%.
+  Meat overall: 78%. Bread grain: 68%. Potatoes: 79%. Vegetables: 49%.
+  Plant-based overall: 37%.
+  https://2024.agrarbericht.ch/de/markt/marktentwicklungen/selbstversorgungsgrad
+
+========================================================================
+§5. THE ENVIRONMENTAL BILL — PRIMARY SOURCES
+========================================================================
+
+AMMONIA EMISSIONS
+- Agriculture: 92% of total Swiss ammonia. Livestock: 93% of agricultural ammonia.
+- Cattle: 77% of livestock ammonia. Pigs: declined 49% since 1990. Poultry: +32%.
+- Farm-manure spreading: 44%. Housing/outdoor yards: 36%.
+- Total decline: 23% since 1990, but stagnant since ~2000.
+- Critical load thresholds exceeded in large parts of Switzerland — eutrophication
+  and acidification of forests, bogs, species-rich grasslands, alpine heathland.
+  https://www.agrarforschungschweiz.ch/en/2022/11/ammonia-emissions-from-agriculture-in-switzerland-for-1990-to-2020/
+  https://www.bafu.admin.ch/bafu/en/home/topics/air/info-specialists/air-quality-in-switzerland/nitrogen-containing-air-pollutants-affect-biodiversity.html
+
+GREENHOUSE GAS EMISSIONS
+- Agriculture: 16% of Swiss GHG emissions (mainly CH₄ and N₂O).
+- 56% enteric fermentation (ruminants), 25% agricultural soils, 18% manure management.
+  https://www.bafu.admin.ch/bafu/en/home/topics/climate/data/greenhouse-gas-inventory/agriculture.html
+  https://www.agroscope.admin.ch/agroscope/en/home/topics/environment-resources/climate-air-quality/treibhausgas-emissionen/swiss-national-greenhouse-gas-inventory-agriculture.html
+
+NITROGEN FLOWS
+- ~70,000 tonnes of nitrogen entered Swiss water bodies in 2020.
+- Agriculture target to reduce N inputs to water by 50% vs 1985 was not met (gap: ~8,000 t).
+- Nitrogen surpluses stagnating since late 1990s, particularly high in regions with
+  excessive livestock density and imported feed.
+  https://www.bafu.admin.ch/bafu/en/home/topics/chemicals/publications-studies/publications/nitrogen-flows-switzerland-2020.html
+  Full PDF: https://www.bafu.admin.ch/dam/bafu/en/dokumente/chemikalien/uw-umwelt-wissen/stickstofffluesseinderschweiz2020stoffflussanalyseundentwicklung.pdf
+
+BIODIVERSITY HARM FROM SUBSIDIES
+- >70% of state agricultural subsidies are potentially, partially, or fully harmful
+  to biodiversity. Source: Gubler (2020).
+  Cited by: https://www.foraus.ch/en/posts/the-need-for-transparency-in-swiss-agriculture/
+
+========================================================================
+§6. THE ALTERNATIVE — PRIMARY SOURCES
+========================================================================
+
+ETH / FiBL SELF-SUFFICIENCY STUDY (December 2025)
+- Swiss agriculture could feed the entire population without imports if land currently
+  used for animal feed were shifted to crops for direct human consumption.
+- Requires less meat and dairy, more grains and legumes.
+- Environmental co-benefits: GHG and ammonia reduction goals would become achievable.
+  https://www.srf.ch/news/dialog/lebensmittelproduktion-schweizer-landwirtschaft-koennte-die-gesamte-bevoelkerung-ernaehren
+  (TODO: find the actual study PDF from FiBL/ETH, not just the SRF report)
+
+AGROSCOPE: OPTIMAL LIVESTOCK LEVELS (Agrarforschung Schweiz, 2023)
+- Under Climate Strategy 2050, optimal: 887,573 cattle (vs ~1,537,000 current → 42% reduction).
+- Dairy cows: 545,485 (vs ~676,000 → 19% reduction).
+- Pigs: 61,411 livestock units (vs ~175,000 LU → 65% reduction).
+- Model: use arable land for food, grassland for livestock, no imported feed.
+  https://www.agrarforschungschweiz.ch/en/2023/12/how-much-livestock-does-switzerland-need-for-optimal-land-use/
+
+SWISS LEGUME SHIFT (Nature Communications Earth & Environment, 2024)
+- Current grain legume production: ~9,000 ha (negligible).
+- Scenario I: 107,734 ha suitable on existing arable land.
+- Scenario II: 181,479 ha (replacing grassland/fodder maize) → replaces ~41% of animal
+  protein with plant protein, preserving 32% of milk and 24% of meat protein.
+  https://www.nature.com/articles/s43247-023-01139-z
+
+ETH / ZURICH-BASEL PLANT SCIENCE CENTER (2024)
+- ~70% of Swiss agricultural land is grassland used for livestock feed.
+- Modeled whether Switzerland could produce a Planetary Health Diet domestically.
+  https://blogs.ethz.ch/Science_and_Policy/2024/06/02/food-for-thought-could-swiss-agriculture-provide-healthy-and-sustainable-food-for-its-population/
+
+FRONTIERS STUDY (2025): ORGANIC + DIETARY GUIDELINES
+- Modeled Swiss food in 2050 under organic agriculture + dietary changes (EAT-Lancet).
+- Environmental benefits mainly from dietary changes, not organic conversion.
+  https://www.frontiers.org/journals/sustainable-food-systems/articles/10.3389/fsufs.2025.1548480/full
+
+COMPARISON: NEDERLAND VEGANLAND (Leiden University, 2024)
+- NL uses 1,800 m²/person; vegan diet → 800 m²/person. Frees 7,000 km².
+  https://www.universiteitleiden.nl/en/news/2024/04/netherlands-veganland-a-good-idea-these-are-the-outcomes-of-the-thought-experiment
+  Full report: https://nederlandveganland.nl/Nederland-Vegan-EN.pdf
+
+========================================================================
+§7. THE CONSTITUTIONAL QUESTION — PRIMARY SOURCES
+========================================================================
+
+SWISS CONSTITUTION (Fedlex, English)
+- Article 75: Confederation lays down principles on spatial planning for appropriate
+  and economic use of land and properly ordered settlement.
+- Article 75b: Second homes capped at max 20% per municipality (approved March 11, 2012).
+- Article 104: Agriculture must contribute to reliable food provision, conservation of
+  natural resources, upkeep of countryside, and decentralized settlement.
+  Multi-functional duties.
+- Article 108: Confederation promotes housing construction, acquisition of property,
+  and non-profit housing. Promotes land acquisition for housing, cost reduction.
+  https://www.fedlex.admin.ch/eli/cc/1999/404/en
+
+The tension: Art. 104 protects agriculture's multi-functional role and Art. 108 mandates
+housing promotion — but Art. 104 does not specify that agriculture must be livestock-based,
+and Art. 108's housing mandate is being undermined by the land allocation to livestock.
+
+POPULAR VOTES
+- Massentierhaltungsinitiative (factory farming), Sept 25 2022: rejected 62.9%.
+  https://www.admin.ch/gov/en/start/documentation/votes/20220925/factory-farming-initiative.html
+- Biodiversitätsinitiative, Sept 22 2024: rejected 63%.
+  https://www.admin.ch/gov/en/start/documentation/votes/20240922/biodiversity-initiative.html
+- Trinkwasserinitiative, June 13 2021: rejected 60.7%.
+  https://www.admin.ch/gov/en/start/documentation/votes/20210613/popular-initiative-for-clean-drinking-water-and-healthy-food.html
+- Pestizidinitiative, June 13 2021: rejected ~60%.
+- Landschaftsinitiative: withdrawn after RPG 2 counterproposal (November 2023).
+  https://www.landschaftsinitiative.ch/
+  https://www.are.admin.ch/de/rpg2
+
+========================================================================
+MAP AND TECHNICAL NOTES (preserved from earlier research)
+========================================================================
 
 ### Data Sources for Interactive Map
 
-#### Land Use Data (equivalent to CBS Bodemgebruik)
+#### Land Use Data
+- Arealstatistik (NOAS04) — 100m point grid, 72 categories. Statistics only, not for map.
+  https://opendata.swiss/en/dataset/arealstatistik-nach-standardnomenklatur-noas04
+- Sentinel-2 Cropland vs Grassland Map — 84–95% accuracy, high resolution.
+  https://www.envidat.ch/dataset/cropland-and-grassland-map-of-switzerland-based-on-sentinel-2-data
+  Paper: https://essd.copernicus.org/articles/14/295/2022/
 
-**Note:** The Arealstatistik is a 100m point grid, NOT vector polygons — not directly usable like CBS Bodemgebruik was for the NL map. Use the vector datasets below instead.
+#### Geospatial / Vector Data
 
-- **Arealstatistik (NOAS04)** — BFS land use statistics. 72 categories on a 100m grid. Point-based, not polygon-based. Useful for statistics but not for the map overlay.
-  - https://opendata.swiss/en/dataset/arealstatistik-nach-standardnomenklatur-noas04
+Agricultural layer:
+- Nutzungsplanung (geodienste.ch) — building + agricultural zones as polygons.
+  https://www.geodienste.ch/services/npl_nutzungsplanung
+- Landwirtschaftliche Nutzungsflächen — field-level polygons, per canton.
+  https://www.geodienste.ch/services/lwb_nutzungsflaechen
+  https://opendata.swiss/de/dataset/landwirtschaftliche-nutzungsflachen-schweiz
+- Landwirtschaftliche Zonengrenzen — 6 zones + Sömmerung.
+  Shapefile: https://data.geo.admin.ch/ch.blw.landwirtschaftliche-zonengrenzen/landwirtschaftliche-zonengrenzen/landwirtschaftliche-zonengrenzen_2056.shp.zip
 
-- **Sentinel-2 Cropland vs Grassland Map** — Peer-reviewed, freely downloadable national map distinguishing cropland from permanent grassland at high resolution (84–95% accuracy). Key dataset for showing pastoral vs. arable land.
-  - https://www.envidat.ch/dataset/cropland-and-grassland-map-of-switzerland-based-on-sentinel-2-data
-  - Published paper: https://essd.copernicus.org/articles/14/295/2022/
+Residential layer:
+- Bauzonen Schweiz (KGK-CGC) — harmonized building zones, 9 categories.
+  Download: https://www.kgk-cgc.ch/geodaten/geodaten-bauzonen-schweiz
+  Preview: https://map.geo.admin.ch/?layers=ch.are.bauzonen
+  https://opendata.swiss/en/dataset/bauzonen-schweiz-harmonisiert
 
-#### Geospatial / Vector Data for the Map
+### Mountain/Alpine Terrain Layer
 
-##### Agricultural layer (orange)
-
-- **Nutzungsplanung (geodienste.ch)** — BEST single dataset. Contains both building zones AND agricultural zones as vector polygons. Closest equivalent to CBS Bodemgebruik. Available as GeoPackage, Shapefile, WFS. Nearly all cantons covered (gaps: Graubünden, Ticino, Zürich still in progress).
-  - https://www.geodienste.ch/services/npl_nutzungsplanung
-
-- **Landwirtschaftliche Nutzungsflächen** — Field-level vector polygons of individual cultivated areas (meadows, pastures, arable fields). GeoPackage format via geodienste.ch, per canton. Updated annually.
-  - https://www.geodienste.ch/services/lwb_nutzungsflaechen
-  - https://opendata.swiss/de/dataset/landwirtschaftliche-nutzungsflachen-schweiz
-
-- **Landwirtschaftliche Zonengrenzen** — 6 production zones + summer pasture as vector polygons. Direct download available (Shapefile + GeoPackage), EPSG:2056. Note: these are elevation/climate-based zone classifications (Talzone, Hügelzone, Bergzone I–IV, Sömmerungsgebiet), not individual fields.
-  - Shapefile: https://data.geo.admin.ch/ch.blw.landwirtschaftliche-zonengrenzen/landwirtschaftliche-zonengrenzen/landwirtschaftliche-zonengrenzen_2056.shp.zip
-  - GeoPackage: https://data.geo.admin.ch/ch.blw.landwirtschaftliche-zonengrenzen/landwirtschaftliche-zonengrenzen/landwirtschaftliche-zonengrenzen_2056.gdb.zip
-  - https://opendata.swiss/en/dataset/landwirtschaftliche-zonengrenzen-der-schweiz
-
-##### Residential/urban layer (green)
-
-- **Bauzonen Schweiz (KGK-CGC)** — Harmonized building zones for all of Switzerland. Vector polygons in 9 categories (Wohnzonen, Arbeitszonen, Mischzonen, etc.). ~174 MB ZIP. This is the residential equivalent.
-  - Download: https://www.kgk-cgc.ch/geodaten/geodaten-bauzonen-schweiz
-  - Preview: https://map.geo.admin.ch/?layers=ch.are.bauzonen
-  - https://opendata.swiss/en/dataset/bauzonen-schweiz-harmonisiert
-
-##### Fallback option
-
-- **CORINE Land Cover 2018** — Switzerland participates. Pre-classified urban/agricultural/forest vector polygons. Coarser (25ha minimum mapping unit) but simple and standardized. Registration required (free).
-  - https://land.copernicus.eu/en/products/corine-land-cover/clc2018
-  - Swiss-specific info: https://www.wsl.ch/en/projects/corine-switzerland/
-
-##### Other reference datasets
-
-- **swissTLM3D** — Swisstopo topographic landscape model. Has land cover (Bodenbedeckung) and area layers but does NOT classify agricultural vs. residential — more of a physical ground cover classification. Would need to combine with zoning data.
-  - https://opendata.swiss/en/dataset/swisstlm3d
-
-- **Landwirtschaftliche Nutzungseignung** — 10-class agricultural suitability map (soil, relief, climate). Reference only.
-  - https://opendata.swiss/de/dataset/landwirtschaftliche-nutzungseignung1
-
-#### Subsidy Data (Direktzahlungen — Swiss CAP equivalent)
-
-Switzerland's subsidy system is called **Direktzahlungen** (Direct Payments) under the **Agrarpolitik** (AP) framework, currently AP 2022+.
-
-- **Total**: CHF 2.791 billion in direct payments (2023). ~CHF 4.4 billion including all federal and cantonal subsidies.
-- **51% of farm income** comes from subsidies — more than 3× the OECD average.
-- **Avenir Suisse** estimates total economic cost at CHF 20.7 billion/year, or ~CHF 2,300 per household annually.
-
-**7 payment categories**: Cultural landscape, supply security, biodiversity, landscape quality, production systems, resource efficiency, transition contributions.
-
-Data sources:
-- **University of Bern interactive platform** — Visualizations + raw data downloads, broken down by farm type (cattle, pigs, poultry, crops, etc.) and contribution category. GitHub repo available.
-  - https://direktzahlungen-ch-bauern.opendata.iwi.unibe.ch/
-- **Canton-level breakdowns** on opendata.swiss (XLS format).
-  - https://opendata.swiss/en/dataset/ubersicht-direktzahlungen-alle-arten-nach-kantonen-2015
-- **Agrarbericht** (Agricultural Report) — Published annually with detailed tables.
-  - https://www.agrarbericht.ch/de/politik/direktzahlungen/finanzielle-mittel-fuer-direktzahlungen
-- **BLW/FOAG on opendata.swiss** — 122 datasets covering market data, subsidies, and more.
-  - https://opendata.swiss/en/organization/bundesamt-fur-landwirtschaft-blw
-- **OECD monitoring report** (English):
-  - https://www.oecd.org/en/publications/2025/10/agricultural-policy-monitoring-and-evaluation-2025_354e7040/full-report/switzerland_9badc265.html
-- **Avenir Suisse** (critical analysis of subsidy inefficiency):
-  - https://www.avenir-suisse.ch/en/publication/swiss-agriculture-continues-to-enjoy-growing-economic-privileges/
-
-#### Livestock Data (equivalent to CBS Landbouwtelling)
-
-- **Tierstatistik (identitas.ch)** — Livestock counts by canton AND municipality, downloadable as CSV. Covers cattle (since 2010), equids (since 2016), sheep & goats (since 2020).
-  - https://tierstatistik.identitas.ch/en/docs.html
-- **Cattle distribution by canton** on opendata.swiss.
-  - https://opendata.swiss/en/dataset/rinder-verteilung-pro-kanton
-- Key numbers (2022): 1,525,000 cattle, 1,374,000 pigs, 13,126,000 poultry.
-- Note: Pig and poultry data may require the BFS agricultural census directly (Tierstatistik focuses on individually tracked animals).
-
-### Housing Crisis Connection
-
-- 66% of the Swiss population rejects building on agricultural/green land despite the housing crisis.
-- 173 municipalities have rezoned 390 hectares of building land BACK to agricultural zones (Auszonung).
-- The **Raumplanungsgesetz** (Spatial Planning Act) revision tightened rules on building zones, directly constraining housing supply.
-- Active political tension between housing shortage and agricultural zone protection.
-
-Relevant reporting:
-- SIPA: https://sipa.swiss/urban-sprawl-farmland-under-pressure-from-property-development-and-urban-growth/?lang=en
-- SWI swissinfo.ch: https://www.swissinfo.ch/ger/wirtschaft/die-schweizer-raumplanung-produziert-gewinner-und-verlierer/45871044
-- ScienceDirect paper on land policy for affordable housing: https://www.sciencedirect.com/science/article/pii/S0264837720308930
-
-### Key Angles for the Article
-
-1. **The subsidy story is even more dramatic than the Netherlands** — 51% of farm income from subsidies vs. EU CAP levels. CHF 2,300 per household per year.
-2. **Land scarcity is acute** — Switzerland is mountainous, making habitable/buildable land genuinely scarce, yet large portions of the usable lowland go to livestock.
-3. **Rezoning paradox** — Municipalities are actively converting building land back to agricultural zones while housing costs spiral.
-4. **The Sentinel-2 map** could provide a powerful visual — cropland vs. grassland at high resolution, showing how much land is pastoral.
-
-### Recommended Map Approach
-
-Combine **Bauzonen** (residential areas → green layer) + **Nutzungsflächen** (agricultural parcels → orange layer). This mirrors the NL map approach with CBS urban + agriculture layers. Process both into simplified GeoJSON, reproject to WGS84.
-
-Alternatively, use **Nutzungsplanung** from geodienste.ch as a single dataset containing both zone types.
-
-### Mountain/Alpine Terrain Layer Research
-
-**Goal**: Show that the "empty" dark areas on the map are mountains (Alps ~60% of CH), not available land.
-
-#### Recommended: MapLibre native hillshade (raster-dem)
-
-MapLibre has a built-in `hillshade` layer type that renders shaded relief client-side from terrain RGB tiles. No 3D geometry — produces a 2D shaded overlay that blends perfectly with our flat colored polygon overlays.
-
-**Best tile sources**:
-- **AWS Terrain Tiles** (quick start, no setup): `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png` — terrarium encoding, free, z15 max
-- **Mapterhorn** (better for CH, uses swissALTI3D at 0.5m resolution!): `https://download.mapterhorn.com/planet.pmtiles` — can extract CH-only PMTiles via `pmtiles extract ... --bbox=5.9,45.8,10.5,47.9`
-- **Mapterhorn XYZ** (no PMTiles needed): `https://tiles.mapterhorn.com/{z}/{x}/{y}.webp` — terrarium encoding
-
-**Implementation** (~15 lines in style.load handler):
-```typescript
-map.addSource("terrain-dem", {
-  type: "raster-dem",
-  tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"],
-  encoding: "terrarium",
-  tileSize: 256,
-  maxzoom: 12,
-});
-map.addLayer({
-  id: "hillshade",
-  type: "hillshade",
-  source: "terrain-dem",
-  paint: {
-    "hillshade-shadow-color": "#0a0a0a",
-    "hillshade-highlight-color": "#2a2a2a",
-    "hillshade-exaggeration": 0.3,
-    "hillshade-illumination-direction": 315,
-  },
-}, firstDataLayerId); // below data layers, above basemap
-```
-
-**Why this approach**:
-- Minimal code (~15 lines), no new deps, uses MapLibre built-in
-- Full dark-theme color control (shadow/highlight match dark-matter)
-- Tiles fetched lazily on demand (~10-50KB each), negligible perf impact
-- Sits below vector polygons as subtle texture — mountains gain visible relief
-- Mapterhorn uses swissALTI3D for CH = 0.5m resolution terrain
-
-#### Rejected approaches
-
-- **deck.gl TerrainLayer**: 3D mesh would look bizarre alongside flat 2D fills. We also just removed deck.gl.
-- **MapLibre 3D terrain (setTerrain)**: Warps entire map, known bugs with polygon draping and hillshade opacity. GPU-intensive.
-- **swisstopo pre-rendered hillshade WMTS**: Tiles have white/gray background baked in — creates visible lighter rectangle on dark basemap. Limited color control.
-- **swissTLM3D Bodenbedeckung polygons**: Could add unproductive terrain (Fels, Gletscher, Lockergestein) as subtle fill layer. Good supplement to hillshade, not replacement. Data is ~2GB download, complex processing.
-- **Contour lines (maplibre-contour)**: Dense contours in Alps create visual noise competing with data overlays.
-
-#### Optional enhancement
-
-Add swissTLM3D glacier polygons (Gletscher) as a very subtle light blue fill at ~5% opacity on top of hillshade for visual glacier/rock distinction.
-
-#### References
-- MapLibre hillshade example: https://maplibre.org/maplibre-gl-js/docs/examples/add-a-hillshade-layer/
-- Mapterhorn: https://protomaps.com/blog/mapterhorn-terrain/
-- AWS Terrain Tiles: https://registry.opendata.aws/terrain-tiles/
-- swissTLM3D: https://www.swisstopo.admin.ch/en/landscape-model-swisstlm3d
+Recommended: MapLibre native hillshade (raster-dem).
+- AWS Terrain Tiles: https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png
+- Mapterhorn XYZ: https://tiles.mapterhorn.com/{z}/{x}/{y}.webp (terrarium encoding)
 
 ### TODO
 
 - [x] Download Bauzonen Shapefile from KGK-CGC (~174 MB)
-- [x] Download Landwirtschaftliche Nutzungsflächen GeoPackage from geodienste.ch (per canton)
+- [x] Download Landwirtschaftliche Nutzungsflächen GeoPackage from geodienste.ch
 - [x] Write extraction script to simplify + reproject to WGS84
 - [x] Build interactive map component
 - [ ] Add mountain/alpine terrain hillshade layer
 - [ ] Download and analyze subsidy data from University of Bern platform
 - [ ] Get municipality-level livestock data from Tierstatistik
 - [ ] Calculate land use percentages (agricultural vs. residential vs. other)
-- [ ] Write the article
+- [ ] Write the article text
+
+*/}

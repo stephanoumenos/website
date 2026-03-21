@@ -14,3 +14,6 @@ scripts/*/.venv/
 *.gpkg-shm
 *.gpkg-wal
 table_*.csv
+*.zip
+*.pmtiles-journal
+*_10m.geojson
