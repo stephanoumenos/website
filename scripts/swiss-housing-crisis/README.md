@@ -55,10 +55,55 @@ https://www.geodienste.ch/downloads/geopackage/lwb_nutzungsflaechen/{CANTON}/deu
 ```
 (Some cantons use `v2_0` instead of `v3_0`.)
 
+## Mountain mask
+
+The hillshade terrain layer is masked to only show in high-altitude areas (Bergzone III, IV, and Sömmerungsgebiet — roughly 1200m+). This prevents low-altitude hills from cluttering the map.
+
+**Source**: Landwirtschaftliche Zonengrenzen (BLW)
+- Download: https://data.geo.admin.ch/ch.blw.landwirtschaftliche-zonengrenzen/landwirtschaftliche-zonengrenzen/landwirtschaftliche-zonengrenzen_2056.gdb.zip
+- opendata.swiss: https://opendata.swiss/en/dataset/landwirtschaftliche-zonengrenzen-der-schweiz
+
+**How to regenerate `public/data/ch_mountain_mask.geojson`**:
+
+```bash
+source .venv/bin/activate
+python3 -c "
+import geopandas as gpd
+import json
+from shapely.ops import unary_union
+
+gdf = gpd.read_file('path/to/NachF_LWZ.gdb', layer='LWZ')
+mountain = gdf[gdf['LZCODE'].isin([53, 54, 61])]  # BZ III, IV, Sömmerungsgebiet
+dissolved = unary_union(mountain.geometry).simplify(200)
+result = gpd.GeoDataFrame(geometry=[dissolved], crs='EPSG:2056').to_crs('EPSG:4326')
+geom = result.geometry[0].simplify(0.0005)
+
+world = [[-180, -90], [180, -90], [180, 90], [-180, 90], [-180, -90]]
+holes = []
+for poly in geom.geoms:
+    coords = [[round(c[0], 3), round(c[1], 3)] for c in poly.exterior.coords]
+    holes.append(coords[::-1])
+
+mask = {'type': 'Feature', 'properties': {}, 'geometry': {'type': 'Polygon', 'coordinates': [world] + holes}}
+with open('../../public/data/ch_mountain_mask.geojson', 'w') as f:
+    json.dump(mask, f)
+"
+```
+
+**LZCODE reference**:
+- 31 = Talzone (valley, ~200–600m)
+- 41 = Hügelzone (hills, ~600–800m)
+- 51 = Bergzone I (~800–1000m)
+- 52 = Bergzone II (~1000–1200m)
+- 53 = Bergzone III (~1200–1400m) ← included
+- 54 = Bergzone IV (~1400–1600m) ← included
+- 61 = Sömmerungsgebiet (~1600m+) ← included
+
 ## Data sources
 
 - **Bauzonen Schweiz** (KGK-CGC): https://opendata.swiss/en/dataset/bauzonen-schweiz-harmonisiert
 - **Landwirtschaftliche Nutzungsflächen**: https://opendata.swiss/de/dataset/landwirtschaftliche-nutzungsflachen-schweiz
+- **Landwirtschaftliche Zonengrenzen** (BLW): https://opendata.swiss/en/dataset/landwirtschaftliche-zonengrenzen-der-schweiz
 - STAC catalog: https://www.geodienste.ch/stac/collections/lwb_nutzungsflaechen
 
 ## lnf_code classification

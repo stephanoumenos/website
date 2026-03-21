@@ -122,12 +122,73 @@ Combine **Bauzonen** (residential areas → green layer) + **Nutzungsflächen** 
 
 Alternatively, use **Nutzungsplanung** from geodienste.ch as a single dataset containing both zone types.
 
+### Mountain/Alpine Terrain Layer Research
+
+**Goal**: Show that the "empty" dark areas on the map are mountains (Alps ~60% of CH), not available land.
+
+#### Recommended: MapLibre native hillshade (raster-dem)
+
+MapLibre has a built-in `hillshade` layer type that renders shaded relief client-side from terrain RGB tiles. No 3D geometry — produces a 2D shaded overlay that blends perfectly with our flat colored polygon overlays.
+
+**Best tile sources**:
+- **AWS Terrain Tiles** (quick start, no setup): `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png` — terrarium encoding, free, z15 max
+- **Mapterhorn** (better for CH, uses swissALTI3D at 0.5m resolution!): `https://download.mapterhorn.com/planet.pmtiles` — can extract CH-only PMTiles via `pmtiles extract ... --bbox=5.9,45.8,10.5,47.9`
+- **Mapterhorn XYZ** (no PMTiles needed): `https://tiles.mapterhorn.com/{z}/{x}/{y}.webp` — terrarium encoding
+
+**Implementation** (~15 lines in style.load handler):
+```typescript
+map.addSource("terrain-dem", {
+  type: "raster-dem",
+  tiles: ["https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"],
+  encoding: "terrarium",
+  tileSize: 256,
+  maxzoom: 12,
+});
+map.addLayer({
+  id: "hillshade",
+  type: "hillshade",
+  source: "terrain-dem",
+  paint: {
+    "hillshade-shadow-color": "#0a0a0a",
+    "hillshade-highlight-color": "#2a2a2a",
+    "hillshade-exaggeration": 0.3,
+    "hillshade-illumination-direction": 315,
+  },
+}, firstDataLayerId); // below data layers, above basemap
+```
+
+**Why this approach**:
+- Minimal code (~15 lines), no new deps, uses MapLibre built-in
+- Full dark-theme color control (shadow/highlight match dark-matter)
+- Tiles fetched lazily on demand (~10-50KB each), negligible perf impact
+- Sits below vector polygons as subtle texture — mountains gain visible relief
+- Mapterhorn uses swissALTI3D for CH = 0.5m resolution terrain
+
+#### Rejected approaches
+
+- **deck.gl TerrainLayer**: 3D mesh would look bizarre alongside flat 2D fills. We also just removed deck.gl.
+- **MapLibre 3D terrain (setTerrain)**: Warps entire map, known bugs with polygon draping and hillshade opacity. GPU-intensive.
+- **swisstopo pre-rendered hillshade WMTS**: Tiles have white/gray background baked in — creates visible lighter rectangle on dark basemap. Limited color control.
+- **swissTLM3D Bodenbedeckung polygons**: Could add unproductive terrain (Fels, Gletscher, Lockergestein) as subtle fill layer. Good supplement to hillshade, not replacement. Data is ~2GB download, complex processing.
+- **Contour lines (maplibre-contour)**: Dense contours in Alps create visual noise competing with data overlays.
+
+#### Optional enhancement
+
+Add swissTLM3D glacier polygons (Gletscher) as a very subtle light blue fill at ~5% opacity on top of hillshade for visual glacier/rock distinction.
+
+#### References
+- MapLibre hillshade example: https://maplibre.org/maplibre-gl-js/docs/examples/add-a-hillshade-layer/
+- Mapterhorn: https://protomaps.com/blog/mapterhorn-terrain/
+- AWS Terrain Tiles: https://registry.opendata.aws/terrain-tiles/
+- swissTLM3D: https://www.swisstopo.admin.ch/en/landscape-model-swisstlm3d
+
 ### TODO
 
-- [ ] Download Bauzonen Shapefile from KGK-CGC (~174 MB)
-- [ ] Download Landwirtschaftliche Nutzungsflächen GeoPackage from geodienste.ch (per canton)
-- [ ] Write extraction script (like `extract_agriculture_geojson.py` for NL) to simplify + reproject to WGS84
-- [ ] Build interactive map component (similar to AgriculturalMap for NL)
+- [x] Download Bauzonen Shapefile from KGK-CGC (~174 MB)
+- [x] Download Landwirtschaftliche Nutzungsflächen GeoPackage from geodienste.ch (per canton)
+- [x] Write extraction script to simplify + reproject to WGS84
+- [x] Build interactive map component
+- [ ] Add mountain/alpine terrain hillshade layer
 - [ ] Download and analyze subsidy data from University of Bern platform
 - [ ] Get municipality-level livestock data from Tierstatistik
 - [ ] Calculate land use percentages (agricultural vs. residential vs. other)

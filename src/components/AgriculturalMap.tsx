@@ -28,6 +28,8 @@ export default function AgriculturalMap() {
       attributionControl: true,
     });
 
+    map.addControl(new maplibregl.FullscreenControl(), "top-right");
+
     map.on("style.load", () => {
       // Find the first symbol layer (labels) so we can insert data beneath it
       const firstSymbol = map

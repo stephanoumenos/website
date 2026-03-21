@@ -29,6 +29,8 @@ export default function SwissLandUseMap() {
       attributionControl: true,
     });
 
+    map.addControl(new maplibregl.FullscreenControl(), "top-right");
+
     map.on("style.load", () => {
       // Find the first symbol layer (labels) so we can insert data beneath it
       const firstSymbol = map
@@ -82,17 +84,17 @@ export default function SwissLandUseMap() {
         "landcover",
       );
 
-      // Mask: hide hillshade outside Switzerland
-      map.addSource("ch-mask", {
+      // Mask: only show hillshade in high mountain areas (Bergzone III+IV+Sömmerungsgebiet, ~1200m+)
+      map.addSource("mountain-mask", {
         type: "geojson",
-        data: "/data/ch_mask.geojson",
+        data: "/data/ch_mountain_mask.geojson",
       });
 
       map.addLayer(
         {
-          id: "ch-mask-fill",
+          id: "mountain-mask-fill",
           type: "fill",
-          source: "ch-mask",
+          source: "mountain-mask",
           paint: {
             "fill-color": "#0e0e0e",
             "fill-opacity": 1,
