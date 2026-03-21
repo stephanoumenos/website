@@ -1,54 +1,131 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import DeckGL from "@deck.gl/react";
-import { PolygonLayer } from "@deck.gl/layers";
-import Map from "react-map-gl/maplibre";
+import React, { useEffect, useRef, useState } from "react";
+import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import { Protocol } from "pmtiles";
 
 const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
 
-const INITIAL_VIEW_STATE = {
-  // Centred on the Swiss Mittelland
-  longitude: 7.45,
-  latitude: 46.95,
-  zoom: isMobile ? 7.5 : 8,
-  pitch: 30,
-  bearing: 0,
-};
-
-type PolygonFeature = {
-  polygon: number[][][] | number[][][][];
-};
-
-/** Extract polygon coordinate rings from a GeoJSON geometry */
-function extractPolygons(geojson: any): PolygonFeature[] {
-  const features: PolygonFeature[] = [];
-  for (const feature of geojson.features ?? [geojson]) {
-    const geom = feature.geometry ?? feature;
-    if (geom.type === "Polygon") {
-      features.push({ polygon: geom.coordinates });
-    } else if (geom.type === "MultiPolygon") {
-      for (const poly of geom.coordinates) {
-        features.push({ polygon: poly });
-      }
-    }
-  }
-  return features;
+// Register PMTiles protocol once
+let protocolRegistered = false;
+function ensureProtocol() {
+  if (protocolRegistered) return;
+  const protocol = new Protocol();
+  maplibregl.addProtocol("pmtiles", protocol.tile);
+  protocolRegistered = true;
 }
-
-type LayerData = {
-  animalAg: PolygonFeature[];
-  plantAg: PolygonFeature[];
-  residential: PolygonFeature[];
-};
 
 export default function SwissLandUseMap() {
   const [hintVisible, setHintVisible] = useState(true);
-  const [data, setData] = useState<LayerData | null>(null);
-  const mapRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<maplibregl.Map | null>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    ensureProtocol();
+
+    const map = new maplibregl.Map({
+      container: containerRef.current,
+      style:
+        "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+      center: [7.45, 46.95],
+      zoom: isMobile ? 7.5 : 8,
+      pitch: 30,
+      bearing: 0,
+      attributionControl: true,
+    });
+
+    map.on("style.load", () => {
+      // Find the first symbol layer (labels) so we can insert data beneath it
+      const firstSymbol = map
+        .getStyle()
+        .layers.find((l) => l.type === "symbol")?.id;
+
+      map.addSource("animal-ag", {
+        type: "vector",
+        url: "pmtiles:///data/agriculture_animal_ch.pmtiles",
+      });
+      map.addSource("plant-ag", {
+        type: "vector",
+        url: "pmtiles:///data/agriculture_plant_ch.pmtiles",
+      });
+      map.addSource("residential", {
+        type: "vector",
+        url: "pmtiles:///data/bauzonen_residential_2022.pmtiles",
+      });
+
+      const dataLayers: maplibregl.LayerSpecification[] = [
+        {
+          id: "animal-ag-fill",
+          type: "fill",
+          source: "animal-ag",
+          "source-layer": "animal_agriculture",
+          paint: { "fill-color": "#ff6400", "fill-opacity": 0.15 },
+        },
+        {
+          id: "animal-ag-line",
+          type: "line",
+          source: "animal-ag",
+          "source-layer": "animal_agriculture",
+          paint: {
+            "line-color": "#ff6400",
+            "line-opacity": 0.47,
+            "line-width": 1,
+          },
+        },
+        {
+          id: "plant-ag-fill",
+          type: "fill",
+          source: "plant-ag",
+          "source-layer": "plant_agriculture",
+          paint: { "fill-color": "#ffdc00", "fill-opacity": 0.2 },
+        },
+        {
+          id: "plant-ag-line",
+          type: "line",
+          source: "plant-ag",
+          "source-layer": "plant_agriculture",
+          paint: {
+            "line-color": "#ffdc00",
+            "line-opacity": 0.51,
+            "line-width": 1,
+          },
+        },
+        {
+          id: "residential-fill",
+          type: "fill",
+          source: "residential",
+          "source-layer": "residential",
+          paint: { "fill-color": "#39ff14", "fill-opacity": 0.1 },
+        },
+        {
+          id: "residential-line",
+          type: "line",
+          source: "residential",
+          "source-layer": "residential",
+          paint: {
+            "line-color": "#39ff14",
+            "line-opacity": 0.31,
+            "line-width": 1,
+          },
+        },
+      ];
+
+      for (const layer of dataLayers) {
+        map.addLayer(layer, firstSymbol);
+      }
+    });
+
+    mapRef.current = map;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+    };
+  }, []);
 
   // Hide hint on first real user interaction
   useEffect(() => {
-    const el = mapRef.current;
+    const el = containerRef.current;
     if (!el || !hintVisible) return;
     const hide = () => setHintVisible(false);
     const events = ["pointerdown", "wheel", "touchstart"] as const;
@@ -57,63 +134,6 @@ export default function SwissLandUseMap() {
     );
     return () => events.forEach((e) => el.removeEventListener(e, hide));
   }, [hintVisible]);
-
-  // Fetch and parse all GeoJSON files
-  useEffect(() => {
-    Promise.all([
-      fetch("/data/agriculture_animal_ch.geojson").then((r) => r.json()),
-      fetch("/data/agriculture_plant_ch.geojson").then((r) => r.json()),
-      fetch("/data/bauzonen_residential_2022.geojson").then((r) => r.json()),
-    ]).then(([animalGeo, plantGeo, residentialGeo]) => {
-      setData({
-        animalAg: extractPolygons(animalGeo),
-        plantAg: extractPolygons(plantGeo),
-        residential: extractPolygons(residentialGeo),
-      });
-    });
-  }, []);
-
-  const layers = useMemo(() => {
-    if (!data) return [];
-    return [
-      new PolygonLayer<PolygonFeature>({
-        id: "animal-agriculture-layer",
-        data: data.animalAg,
-        getPolygon: (d) => d.polygon,
-        filled: true,
-        stroked: true,
-        extruded: false,
-        pickable: false,
-        getFillColor: [255, 100, 0, 40],
-        getLineColor: [255, 100, 0, 120],
-        lineWidthMinPixels: 1,
-      }),
-      new PolygonLayer<PolygonFeature>({
-        id: "plant-agriculture-layer",
-        data: data.plantAg,
-        getPolygon: (d) => d.polygon,
-        filled: true,
-        stroked: true,
-        extruded: false,
-        pickable: false,
-        getFillColor: [255, 220, 0, 50],
-        getLineColor: [255, 220, 0, 130],
-        lineWidthMinPixels: 1,
-      }),
-      new PolygonLayer<PolygonFeature>({
-        id: "residential-layer",
-        data: data.residential,
-        getPolygon: (d) => d.polygon,
-        filled: true,
-        stroked: true,
-        extruded: false,
-        pickable: false,
-        getFillColor: [57, 255, 20, 25],
-        getLineColor: [57, 255, 20, 80],
-        lineWidthMinPixels: 1,
-      }),
-    ];
-  }, [data]);
 
   const legendContent = (
     <>
@@ -170,31 +190,21 @@ export default function SwissLandUseMap() {
       <div className="my-8 relative shadow-2xl sm:shadow-none rounded-xl overflow-hidden">
         {/* Map */}
         <div
-          ref={mapRef}
+          ref={containerRef}
           className="h-[600px] w-full relative rounded-t-xl sm:rounded-xl overflow-hidden sm:shadow-2xl border border-b-0 sm:border-b border-stone-200 dark:border-stone-800 bg-[#0a0a0a] [clip-path:inset(0_round_0.75rem_0.75rem_0_0)] sm:[clip-path:inset(0_round_0.75rem)]"
-        >
-          <DeckGL
-            initialViewState={INITIAL_VIEW_STATE}
-            controller={true}
-            layers={layers}
-            useDevicePixels={1}
-            style={{ position: "absolute", inset: 0 }}
-          >
-            <Map mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json" />
-          </DeckGL>
+        />
 
-          {/* Interaction hint */}
-          {hintVisible && (
-            <div
-              className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full pointer-events-none animate-pulse"
-              style={{ zIndex: 99999 }}
-            >
-              {isMobile
-                ? "Pinch & drag to explore"
-                : "Scroll to zoom, drag to explore"}
-            </div>
-          )}
-        </div>
+        {/* Interaction hint */}
+        {hintVisible && (
+          <div
+            className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full pointer-events-none animate-pulse"
+            style={{ zIndex: 99999 }}
+          >
+            {isMobile
+              ? "Pinch & drag to explore"
+              : "Scroll to zoom, drag to explore"}
+          </div>
+        )}
 
         {/* Desktop: overlay on map */}
         <div className="hidden sm:block absolute top-4 left-4 z-10 max-w-[220px]">
