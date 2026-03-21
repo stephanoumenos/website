@@ -22,6 +22,7 @@
     "astro": "6.0.4",
     "deck.gl": "^9.2.11",
     "maplibre-gl": "^5.20.1",
+    "motion": "^12.38.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-map-gl": "^8.1.0",

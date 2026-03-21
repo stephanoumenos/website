@@ -131,11 +131,16 @@ def extract_layer(gdf, name, output, filter_fn):
     print("  Reprojecting to EPSG:4326...")
     subset = subset.to_crs(epsg=4326)
 
+    # Post-reproject simplification to reduce vertex count for browser rendering
+    # 0.0005° ≈ 40m at Swiss latitudes — invisible at the zoom levels we use
+    print("  Final simplification (0.0005°)...")
+    subset["geometry"] = subset["geometry"].simplify(0.0005)
+
     subset = subset[["geometry"]]
 
     output.parent.mkdir(parents=True, exist_ok=True)
     print(f"  Writing {output}...")
-    subset.to_file(output, driver="GeoJSON", coordinate_precision=4)
+    subset.to_file(output, driver="GeoJSON", coordinate_precision=3)
 
     size_mb = os.path.getsize(output) / (1024 * 1024)
     print(f"  Done! {size_mb:.1f} MB\n")

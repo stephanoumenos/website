@@ -118,19 +118,6 @@ export default function SubsidyChart() {
           />
         </div>
 
-        {/* Annotation */}
-        <div className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed -mt-2 mb-4">
-          The same animal products that receive{" "}
-          <span className="font-semibold text-orange-600 dark:text-orange-400">
-            82%
-          </span>{" "}
-          of farm subsidies account for an estimated{" "}
-          <span className="font-semibold text-orange-600 dark:text-orange-400">
-            84%
-          </span>{" "}
-          of the EU's food-related greenhouse gas emissions.
-        </div>
-
         <div className="pt-3 border-t border-stone-200 dark:border-stone-700 text-[10px] text-stone-400 dark:text-stone-500">
           Sources: EU budget from{" "}
           <a
