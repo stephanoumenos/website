@@ -46,8 +46,9 @@ export default function SwissLandUseMap() {
         maxzoom: 12,
       });
 
-      map.setTerrain({ source: "terrain-dem", exaggeration: 1.5 });
+      map.setTerrain({ source: "terrain-dem", exaggeration: 2.0 });
 
+      // Primary light from NW (cartographic standard)
       map.addLayer(
         {
           id: "hillshade",
@@ -56,9 +57,26 @@ export default function SwissLandUseMap() {
           paint: {
             "hillshade-shadow-color": "#000000",
             "hillshade-highlight-color": "#ffffff",
-            "hillshade-accent-color": "#aaaaaa",
-            "hillshade-exaggeration": 0.5,
+            "hillshade-accent-color": "#cccccc",
+            "hillshade-exaggeration": 0.8,
             "hillshade-illumination-direction": 315,
+          },
+        },
+        "landcover",
+      );
+
+      // Secondary light from NE — fills in shadows, more white coverage
+      map.addLayer(
+        {
+          id: "hillshade-secondary",
+          type: "hillshade",
+          source: "terrain-dem",
+          paint: {
+            "hillshade-shadow-color": "transparent",
+            "hillshade-highlight-color": "#ffffff",
+            "hillshade-accent-color": "#999999",
+            "hillshade-exaggeration": 0.4,
+            "hillshade-illumination-direction": 45,
           },
         },
         "landcover",
@@ -97,6 +115,29 @@ export default function SwissLandUseMap() {
       });
 
       const dataLayers: maplibregl.LayerSpecification[] = [
+        // Dark backgrounds to block hillshade from bleeding through
+        {
+          id: "animal-ag-bg",
+          type: "fill",
+          source: "animal-ag",
+          "source-layer": "animal_agriculture",
+          paint: { "fill-color": "#0e0e0e", "fill-opacity": 1 },
+        },
+        {
+          id: "plant-ag-bg",
+          type: "fill",
+          source: "plant-ag",
+          "source-layer": "plant_agriculture",
+          paint: { "fill-color": "#0e0e0e", "fill-opacity": 1 },
+        },
+        {
+          id: "residential-bg",
+          type: "fill",
+          source: "residential",
+          "source-layer": "residential",
+          paint: { "fill-color": "#0e0e0e", "fill-opacity": 1 },
+        },
+        // Colored fills on top of dark backgrounds
         {
           id: "animal-ag-fill",
           type: "fill",
