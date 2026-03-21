@@ -35,6 +35,54 @@ export default function SwissLandUseMap() {
         .getStyle()
         .layers.find((l) => l.type === "symbol")?.id;
 
+      // 3D terrain + hillshade
+      map.addSource("terrain-dem", {
+        type: "raster-dem",
+        tiles: [
+          "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+        ],
+        encoding: "terrarium",
+        tileSize: 256,
+        maxzoom: 12,
+      });
+
+      map.setTerrain({ source: "terrain-dem", exaggeration: 1.5 });
+
+      map.addLayer(
+        {
+          id: "hillshade",
+          type: "hillshade",
+          source: "terrain-dem",
+          paint: {
+            "hillshade-shadow-color": "#000000",
+            "hillshade-highlight-color": "#ffffff",
+            "hillshade-accent-color": "#aaaaaa",
+            "hillshade-exaggeration": 0.5,
+            "hillshade-illumination-direction": 315,
+          },
+        },
+        "landcover",
+      );
+
+      // Mask: hide hillshade outside Switzerland
+      map.addSource("ch-mask", {
+        type: "geojson",
+        data: "/data/ch_mask.geojson",
+      });
+
+      map.addLayer(
+        {
+          id: "ch-mask-fill",
+          type: "fill",
+          source: "ch-mask",
+          paint: {
+            "fill-color": "#0e0e0e",
+            "fill-opacity": 1,
+          },
+        },
+        "landcover",
+      );
+
       map.addSource("animal-ag", {
         type: "vector",
         url: "pmtiles:///data/agriculture_animal_ch.pmtiles",
