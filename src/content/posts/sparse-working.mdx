@@ -1,33 +1,19 @@
 ---
 title: "Sparse Working"
-description: "The optimal strategy for working with AI agents looks a lot like doing nothing. The maths checks out. The psychology does not."
-pubDate: "2026-03-19"
+description: "The optimal strategy for working with AI agents looks a lot like doing nothing. The maths checks out. The psychology doesn't."
+pubDate: "2026-03-25"
 tags: ["ai", "productivity"]
-draft: true
+draft: false
 ---
 
 import SparseWorkingChart from "../../components/SparseWorkingChart";
 
-My most productive days are now indistinguishable from my laziest. I type for perhaps 45 minutes across an eight-hour stretch. I ship more than I used to in a week.
+My most productive days now look like my laziest. I type for maybe 45 minutes across eight hours. I ship more than I used to in a week.
 
-## The geometry
-
-Traditional work traces a sawtooth: output scales linearly with keyboard time, interrupted by breaks. Agentic work traces a step function: idle stretches punctuated by bursts where parallel agents spawn subagents and output grows superlinearly.
+The shape of the work has changed. Traditional output is linear: you type, it accumulates. Agentic output is a step function. Long idle stretches, then a burst of parallel results you evaluate in minutes.
 
 <SparseWorkingChart client:visible />
 
-Two constraints keep the model honest. Amdahl's law: a serial fraction _s_ caps speedup at 1/(_s_ + (1 − _s_)/_p_), so adding agents hits diminishing returns fast. And a failure probability per cycle, because agents hallucinate. Increase it and the confidence band widens until the agentic curve crosses below traditional. That crossover arrives sooner than most people expect.
+Play with the constraints. More agents help, but sequential dependencies limit the speedup. Agents fail. Crank the failure rate and watch the confidence band widen until the agentic curve dips below traditional. It happens sooner than you'd think.
 
-## The critic who stopped painting
-
-The skill this regime demands most — code judgement — is exactly the one that atrophies fastest when you stop writing code yourself. The dangerous failures are never syntax errors. They are structural: a wrong abstraction, a race condition that only manifests under load, an API surface that will be painful to extend in six months. Code that _works_ but that an experienced engineer _feels_ is off.
-
-That feeling comes from reps. From having written bad abstractions and lived with the consequences. You are now reading an order of magnitude more code than you write, which means your judgement must outpace your practice. The workflow that maximises your output today is quietly eroding the skill that makes you productive at all.
-
-## Vigilance, not endurance
-
-Two minutes on, twenty minutes off. Every instinct says procrastination. The only evidence otherwise is the commit log.
-
-The mode is less marathon runner, more air traffic controller. You must go from zero to full engagement in seconds when an agent finishes, evaluate a complex diff, make a judgement call, and let go again. The difficulty is not the interventions themselves but staying sharp enough to make them well when your fourteenth agent of the day hands you diff number thirty.
-
-The people who will thrive here are not the fastest typists or the most focused. They are the ones who can tolerate feeling unproductive while being extremely productive — a weirdly specific psychological trait that no one has started selecting for, and no existing productivity framework accounts for.
+Two minutes on, twenty off. The optimal move is to interleave: kick off agents, go to a meeting, come back, review diffs, go for a walk, come back, review more diffs. Stretch the workday, take longer breaks, respond to prompts often. The highest-output version of this looks less like grinding and more like checking in between living your life.

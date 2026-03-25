@@ -65,31 +65,29 @@ function traditionalSegments(totalHours: number): Segment[] {
 }
 
 /**
- * Agentic work model with Amdahl's law, learning curve, and optional stochastic noise.
- * When rng is provided, applies log-normal burst noise and per-cycle rework coin flips.
- * learningRate (tau): if > 0, failure rate decays as reworkRate * exp(-t/tau).
+ * Agentic work model with Amdahl's law and optional stochastic noise.
+ * When rng is provided, applies log-normal burst noise and per-cycle failure coin flips.
  */
 function agenticSegments(
   totalHours: number,
   agents: number,
-  subAgents: number,
+  agentSpeed: number,
+  reviewMin: number,
   autonomyMin: number,
   responseDelayMin: number,
   serialFraction: number,
   reworkRate: number,
-  learningRate: number,
   rng?: () => number,
 ): Segment[] {
   const totalMin = totalHours * 60;
-  const interventionMin = 3 + 1 * (agents - 1); // prompt drafting + per-agent review
+  const interventionMin = reviewMin;
   const waitMin = responseDelayMin;
-  const rawParallelism = agents * subAgents;
 
   // Amdahl's law: effective speedup from parallelism
   const effectiveParallelism =
     serialFraction >= 1
       ? 1
-      : 1 / (serialFraction + (1 - serialFraction) / Math.max(rawParallelism, 1));
+      : 1 / (serialFraction + (1 - serialFraction) / Math.max(agents, 1));
 
   const exponent = 1 + Math.log2(Math.max(effectiveParallelism, 1)) * 0.25;
 
@@ -106,28 +104,24 @@ function agenticSegments(
     t = intEnd;
     if (t >= totalMin) break;
 
-    // Learning curve: failure rate decays over the session
-    const cycleRework = learningRate > 0
-      ? reworkRate * Math.exp(-t / learningRate)
-      : reworkRate;
-
     // Agent burst
     const burstEnd = Math.min(t + autonomyMin, totalMin);
     const burstLen = burstEnd - t;
     let burstGain =
+      agentSpeed *
       effectiveParallelism *
       0.6 *
       Math.pow(burstLen / autonomyMin, exponent) *
       autonomyMin;
 
     if (rng) {
-      if (rng() < cycleRework) {
+      if (rng() < reworkRate) {
         burstGain = 0;
       } else {
         burstGain *= Math.exp(normalRandom(rng) * 0.3);
       }
     } else {
-      burstGain *= 1 - cycleRework;
+      burstGain *= 1 - reworkRate;
     }
 
     burstGain = Math.max(burstGain, 0);
@@ -149,12 +143,12 @@ function monteCarloRuns(
   n: number,
   totalHours: number,
   agents: number,
-  subAgents: number,
+  agentSpeed: number,
+  reviewMin: number,
   autonomyMin: number,
   responseDelayMin: number,
   serialFraction: number,
   reworkRate: number,
-  learningRate: number,
   baseSeed: number,
 ): Segment[][] {
   const runs: Segment[][] = [];
@@ -162,8 +156,8 @@ function monteCarloRuns(
     const rng = mulberry32(baseSeed + i * 7919);
     runs.push(
       agenticSegments(
-        totalHours, agents, subAgents, autonomyMin, responseDelayMin,
-        serialFraction, reworkRate, learningRate, rng,
+        totalHours, agents, agentSpeed, reviewMin, autonomyMin,
+        responseDelayMin, serialFraction, reworkRate, rng,
       ),
     );
   }
@@ -298,16 +292,15 @@ function traditionalTimeline(totalHours: number): TimelineBlock[] {
 
 function agenticTimeline(
   totalHours: number,
-  agents: number,
+  reviewMin: number,
   autonomyMin: number,
   responseDelayMin: number,
 ): TimelineBlock[] {
   const totalMin = totalHours * 60;
-  const interventionMin = 3 + 1 * (agents - 1);
   const blocks: TimelineBlock[] = [];
   let t = 0;
   while (t < totalMin) {
-    const intEnd = Math.min(t + interventionMin, totalMin);
+    const intEnd = Math.min(t + reviewMin, totalMin);
     blocks.push({ x1: t, x2: intEnd, active: true });
     t = intEnd;
     if (t >= totalMin) break;
@@ -322,6 +315,7 @@ function agenticTimeline(
 
 function Slider({
   label,
+  hint,
   value,
   min,
   max,
@@ -330,6 +324,7 @@ function Slider({
   formatValue,
 }: {
   label: string;
+  hint?: string;
   value: number;
   min: number;
   max: number;
@@ -347,6 +342,11 @@ function Slider({
           {formatValue ? formatValue(value) : value}
         </span>
       </div>
+      {hint && (
+        <span className="text-[10px] leading-tight text-stone-400 dark:text-stone-500">
+          {hint}
+        </span>
+      )}
       <input
         type="range"
         min={min}
@@ -375,12 +375,12 @@ const SAMPLE_STEP = 5; // minutes between band sample points
 export default function SparseWorkingChart() {
   const [workday, setWorkday] = useState(8);
   const [agents, setAgents] = useState(3);
-  const [subAgents, setSubAgents] = useState(2);
+  const [agentSpeed, setAgentSpeed] = useState(3);
+  const [reviewTime, setReviewTime] = useState(5);
   const [autonomy, setAutonomy] = useState(20);
   const [responseDelay, setResponseDelay] = useState(3);
   const [serialFraction, setSerialFraction] = useState(0.15);
   const [reworkRate, setReworkRate] = useState(0.15);
-  const [learningRate, setLearningRate] = useState(0);
   const [seedOffset, setSeedOffset] = useState(0);
 
   const totalMin = workday * 60;
@@ -391,18 +391,18 @@ export default function SparseWorkingChart() {
 
   // Monte Carlo runs
   const baseSeed = useMemo(
-    () => hashParams(workday, agents, subAgents, autonomy, responseDelay,
-      Math.round(serialFraction * 1000), Math.round(reworkRate * 1000),
-      Math.round(learningRate), seedOffset),
-    [workday, agents, subAgents, autonomy, responseDelay, serialFraction, reworkRate, learningRate, seedOffset],
+    () => hashParams(workday, agents, Math.round(agentSpeed * 100), reviewTime, autonomy,
+      responseDelay, Math.round(serialFraction * 1000), Math.round(reworkRate * 1000),
+      seedOffset),
+    [workday, agents, agentSpeed, reviewTime, autonomy, responseDelay, serialFraction, reworkRate, seedOffset],
   );
 
   const mcRuns = useMemo(
     () => monteCarloRuns(
-      N_RUNS, workday, agents, subAgents, autonomy, responseDelay,
-      serialFraction, reworkRate, learningRate, baseSeed,
+      N_RUNS, workday, agents, agentSpeed, reviewTime, autonomy, responseDelay,
+      serialFraction, reworkRate, baseSeed,
     ),
-    [workday, agents, subAgents, autonomy, responseDelay, serialFraction, reworkRate, learningRate, baseSeed],
+    [workday, agents, agentSpeed, reviewTime, autonomy, responseDelay, serialFraction, reworkRate, baseSeed],
   );
 
   // Compute percentile bands (in raw Y space, before normalization)
@@ -435,57 +435,33 @@ export default function SparseWorkingChart() {
   const p10Mult = bands.p10.length > 0 ? bands.p10[bands.p10.length - 1] : 0;
   const p90Mult = bands.p90.length > 0 ? bands.p90[bands.p90.length - 1] : 0;
 
-  // Traditional Y at each sample point (normalized)
-  const tradYAtSamples = useMemo(
-    () => bands.xs.map((x) => sampleYAtX(normTradSegs, x)),
-    [bands.xs, normTradSegs],
-  );
-
-  // Crossover detection: first point where traditional > agentic median
-  const crossover = useMemo(() => {
-    // Skip the first few points (need some time before crossover is meaningful)
-    for (let i = 2; i < bands.xs.length; i++) {
-      if (tradYAtSamples[i] > bands.p50[i] && bands.p50[i] > 0) {
-        // Interpolate to find exact crossover
-        const prevDiff = bands.p50[i - 1] - tradYAtSamples[i - 1];
-        const currDiff = bands.p50[i] - tradYAtSamples[i];
-        if (prevDiff > 0 && currDiff <= 0) {
-          const frac = prevDiff / (prevDiff - currDiff);
-          const crossX = bands.xs[i - 1] + frac * (bands.xs[i] - bands.xs[i - 1]);
-          return crossX;
-        }
-        return bands.xs[i];
-      }
-    }
-    return null; // No crossover: agents always ahead
-  }, [bands, tradYAtSamples]);
-
   // Leverage ratio: output per active minute (agentic vs traditional)
   const tradTimeline = useMemo(() => traditionalTimeline(workday), [workday]);
   const agentTimeline = useMemo(
-    () => agenticTimeline(workday, agents, autonomy, responseDelay),
-    [workday, agents, autonomy, responseDelay],
+    () => agenticTimeline(workday, reviewTime, autonomy, responseDelay),
+    [workday, reviewTime, autonomy, responseDelay],
   );
 
   const idleStats = useMemo(() => {
     const calc = (blocks: TimelineBlock[]) => {
       let idle = 0;
+      let active = 0;
       let total = 0;
       for (const b of blocks) {
         const dur = b.x2 - b.x1;
         total += dur;
-        if (!b.active) idle += dur;
+        if (b.active) active += dur;
+        else idle += dur;
       }
-      return { idle, total, pct: total > 0 ? (idle / total) * 100 : 0 };
+      return { idle, active, total, pct: total > 0 ? (idle / total) * 100 : 0 };
     };
     return { trad: calc(tradTimeline), agent: calc(agentTimeline) };
   }, [tradTimeline, agentTimeline]);
 
   const leverage = useMemo(() => {
-    const tradActiveFrac = 1 - idleStats.trad.pct / 100;
-    const agentActiveFrac = 1 - idleStats.agent.pct / 100;
+    const tradActiveFrac = idleStats.trad.active / Math.max(idleStats.trad.total, 1);
+    const agentActiveFrac = idleStats.agent.active / Math.max(idleStats.agent.total, 1);
     if (agentActiveFrac <= 0 || tradActiveFrac <= 0) return 0;
-    // Output per active minute, agentic relative to traditional
     return (medianMult / agentActiveFrac) / (1 / tradActiveFrac);
   }, [medianMult, idleStats]);
 
@@ -591,17 +567,6 @@ export default function SparseWorkingChart() {
               <span className="text-stone-600 dark:text-stone-300">
                 Leverage: <span className="font-semibold tabular-nums text-teal-700 dark:text-teal-400">{leverage.toFixed(1)}x</span>
                 <span className="text-stone-400 dark:text-stone-500 ml-1">output per active minute</span>
-              </span>
-            )}
-            {crossover !== null ? (
-              <span className="text-stone-600 dark:text-stone-300">
-                Breakeven: <span className="font-semibold tabular-nums text-amber-700 dark:text-amber-400">{(crossover / 60).toFixed(1)}h</span>
-                <span className="text-stone-400 dark:text-stone-500 ml-1">traditional overtakes</span>
-              </span>
-            ) : (
-              <span className="text-stone-600 dark:text-stone-300">
-                <span className="font-semibold text-teal-700 dark:text-teal-400">No crossover</span>
-                <span className="text-stone-400 dark:text-stone-500 ml-1">agents always ahead</span>
               </span>
             )}
           </div>
@@ -729,28 +694,6 @@ export default function SparseWorkingChart() {
               transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
             />
 
-            {/* Crossover marker */}
-            {crossover !== null && crossover <= totalMin && (
-              <>
-                <line
-                  x1={xScale(crossover)}
-                  y1={PAD.top}
-                  x2={xScale(crossover)}
-                  y2={baseline}
-                  className="stroke-amber-600 dark:stroke-amber-400"
-                  strokeWidth={1.5}
-                  strokeDasharray="6 4"
-                />
-                <text
-                  x={xScale(crossover) + 6}
-                  y={PAD.top + 14}
-                  className="fill-amber-600 dark:fill-amber-400 text-[11px] font-medium"
-                >
-                  {(crossover / 60).toFixed(1)}h
-                </text>
-              </>
-            )}
-
             {/* Axes */}
             <line
               x1={PAD.left}
@@ -805,12 +748,13 @@ export default function SparseWorkingChart() {
                   onChange={setAgents}
                 />
                 <Slider
-                  label="Subagents per agent"
-                  value={subAgents}
-                  min={1}
-                  max={6}
-                  step={1}
-                  onChange={setSubAgents}
+                  label="Agent speed (vs human)"
+                  value={agentSpeed}
+                  min={0.5}
+                  max={10}
+                  step={0.5}
+                  onChange={setAgentSpeed}
+                  formatValue={(v) => `${v}x`}
                 />
                 <Slider
                   label="Autonomy"
@@ -822,10 +766,21 @@ export default function SparseWorkingChart() {
                   formatValue={(v) => `${v} min`}
                 />
                 <Slider
+                  label="Review + prompt time"
+                  hint="Time you spend reviewing diffs and writing the next prompt"
+                  value={reviewTime}
+                  min={1}
+                  max={15}
+                  step={1}
+                  onChange={setReviewTime}
+                  formatValue={(v) => `${v} min`}
+                />
+                <Slider
                   label="Your response delay"
+                  hint="Time before you get back to it after the agent finishes"
                   value={responseDelay}
                   min={1}
-                  max={30}
+                  max={60}
                   step={1}
                   onChange={setResponseDelay}
                   formatValue={(v) => `${v} min`}
@@ -840,10 +795,11 @@ export default function SparseWorkingChart() {
               </div>
               <div className="flex flex-col gap-3">
                 <Slider
-                  label="Serial fraction (Amdahl's law)"
+                  label="Sequential work %"
+                  hint="Work that must happen in order and can't be split across agents"
                   value={serialFraction}
                   min={0}
-                  max={0.5}
+                  max={1}
                   step={0.05}
                   onChange={setSerialFraction}
                   formatValue={(v) => `${Math.round(v * 100)}%`}
@@ -852,19 +808,10 @@ export default function SparseWorkingChart() {
                   label="Failure probability"
                   value={reworkRate}
                   min={0}
-                  max={0.6}
+                  max={0.8}
                   step={0.05}
                   onChange={setReworkRate}
                   formatValue={(v) => `${Math.round(v * 100)}%`}
-                />
-                <Slider
-                  label="Learning rate (context decay)"
-                  value={learningRate}
-                  min={0}
-                  max={240}
-                  step={15}
-                  onChange={setLearningRate}
-                  formatValue={(v) => v === 0 ? "Off" : `τ = ${v} min`}
                 />
               </div>
             </div>
@@ -887,26 +834,21 @@ export default function SparseWorkingChart() {
 
         {/* Idle time timeline */}
         <div className="mt-6 pt-5 border-t border-stone-200 dark:border-stone-700">
-          <div className="text-sm font-semibold text-stone-900 dark:text-stone-100 mb-1">
+          <div className="text-sm font-semibold text-stone-900 dark:text-stone-100 mb-4">
             Your day, from the human's perspective
-          </div>
-          <div className="text-xs text-stone-500 dark:text-stone-400 mb-4 flex flex-wrap items-center gap-x-4 gap-y-1">
-            <span className="inline-flex items-center gap-1.5">
-              <span className="inline-block w-3 h-3 rounded-sm bg-stone-500 dark:bg-stone-400" />
-              <span>Active</span>
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <span className="inline-block w-3 h-3 rounded-sm bg-stone-200 dark:bg-stone-800" />
-              <span>Idle</span>
-            </span>
           </div>
           <div className="flex flex-col gap-4">
             {/* Traditional timeline */}
             <div>
               <div className="flex justify-between items-baseline mb-1.5">
                 <span className="text-xs font-medium text-stone-600 dark:text-stone-400">Traditional</span>
-                <span className="text-xs tabular-nums text-stone-400 dark:text-stone-500">
-                  {Math.round(idleStats.trad.pct)}% idle
+                <span className="text-xs tabular-nums flex gap-3">
+                  <span className="text-stone-500 dark:text-stone-400">
+                    <span className="font-medium text-stone-600 dark:text-stone-300">{Math.round(idleStats.trad.active)} min</span> working
+                  </span>
+                  <span className="text-stone-400 dark:text-stone-500">
+                    <span className="font-medium">{Math.round(idleStats.trad.idle)} min</span> on break
+                  </span>
                 </span>
               </div>
               <svg viewBox={`0 0 ${totalMin} 20`} className="w-full h-6 rounded-md overflow-hidden" preserveAspectRatio="none">
@@ -930,8 +872,13 @@ export default function SparseWorkingChart() {
             <div>
               <div className="flex justify-between items-baseline mb-1.5">
                 <span className="text-xs font-medium text-stone-600 dark:text-stone-400">Agentic</span>
-                <span className="text-xs tabular-nums text-stone-400 dark:text-stone-500">
-                  {Math.round(idleStats.agent.pct)}% idle
+                <span className="text-xs tabular-nums flex gap-3">
+                  <span className="text-teal-700/70 dark:text-teal-400/70">
+                    <span className="font-medium text-teal-700 dark:text-teal-400">{Math.round(idleStats.agent.active)} min</span> reviewing
+                  </span>
+                  <span className="text-stone-400 dark:text-stone-500">
+                    <span className="font-medium">{Math.round(idleStats.agent.idle)} min</span> idle
+                  </span>
                 </span>
               </div>
               <svg viewBox={`0 0 ${totalMin} 20`} className="w-full h-6 rounded-md overflow-hidden" preserveAspectRatio="none">
