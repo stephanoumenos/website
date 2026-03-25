@@ -373,7 +373,8 @@ const N_RUNS = 20;
 const SAMPLE_STEP = 5; // minutes between band sample points
 
 export default function SparseWorkingChart() {
-  const [workday, setWorkday] = useState(8);
+  const [tradWorkday, setTradWorkday] = useState(8);
+  const [agentWorkday, setAgentWorkday] = useState(12);
   const [agents, setAgents] = useState(3);
   const [agentSpeed, setAgentSpeed] = useState(3);
   const [reviewTime, setReviewTime] = useState(5);
@@ -383,26 +384,27 @@ export default function SparseWorkingChart() {
   const [reworkRate, setReworkRate] = useState(0.15);
   const [seedOffset, setSeedOffset] = useState(0);
 
-  const totalMin = workday * 60;
+  const maxWorkday = Math.max(tradWorkday, agentWorkday);
+  const totalMin = maxWorkday * 60;
 
   // Traditional: fixed baseline
-  const tradSegs = useMemo(() => traditionalSegments(workday), [workday]);
+  const tradSegs = useMemo(() => traditionalSegments(tradWorkday), [tradWorkday]);
   const tradTotal = tradSegs.length > 0 ? tradSegs[tradSegs.length - 1].y2 : 1;
 
   // Monte Carlo runs
   const baseSeed = useMemo(
-    () => hashParams(workday, agents, Math.round(agentSpeed * 100), reviewTime, autonomy,
+    () => hashParams(agentWorkday, agents, Math.round(agentSpeed * 100), reviewTime, autonomy,
       responseDelay, Math.round(serialFraction * 1000), Math.round(reworkRate * 1000),
       seedOffset),
-    [workday, agents, agentSpeed, reviewTime, autonomy, responseDelay, serialFraction, reworkRate, seedOffset],
+    [agentWorkday, agents, agentSpeed, reviewTime, autonomy, responseDelay, serialFraction, reworkRate, seedOffset],
   );
 
   const mcRuns = useMemo(
     () => monteCarloRuns(
-      N_RUNS, workday, agents, agentSpeed, reviewTime, autonomy, responseDelay,
+      N_RUNS, agentWorkday, agents, agentSpeed, reviewTime, autonomy, responseDelay,
       serialFraction, reworkRate, baseSeed,
     ),
-    [workday, agents, agentSpeed, reviewTime, autonomy, responseDelay, serialFraction, reworkRate, baseSeed],
+    [agentWorkday, agents, agentSpeed, reviewTime, autonomy, responseDelay, serialFraction, reworkRate, baseSeed],
   );
 
   // Compute percentile bands (in raw Y space, before normalization)
@@ -436,10 +438,10 @@ export default function SparseWorkingChart() {
   const p90Mult = bands.p90.length > 0 ? bands.p90[bands.p90.length - 1] : 0;
 
   // Leverage ratio: output per active minute (agentic vs traditional)
-  const tradTimeline = useMemo(() => traditionalTimeline(workday), [workday]);
+  const tradTimeline = useMemo(() => traditionalTimeline(tradWorkday), [tradWorkday]);
   const agentTimeline = useMemo(
-    () => agenticTimeline(workday, reviewTime, autonomy, responseDelay),
-    [workday, reviewTime, autonomy, responseDelay],
+    () => agenticTimeline(agentWorkday, reviewTime, autonomy, responseDelay),
+    [agentWorkday, reviewTime, autonomy, responseDelay],
   );
 
   const idleStats = useMemo(() => {
@@ -524,11 +526,11 @@ export default function SparseWorkingChart() {
   // X-axis ticks
   const xTicks = useMemo(() => {
     const ticks: number[] = [];
-    for (let h = 0; h <= workday; h++) {
+    for (let h = 0; h <= maxWorkday; h++) {
       ticks.push(h * 60);
     }
     return ticks;
-  }, [workday]);
+  }, [maxWorkday]);
 
   return (
     <div className="lg:-mx-24 xl:-mx-40">
@@ -722,15 +724,26 @@ export default function SparseWorkingChart() {
               <div className="text-xs font-medium text-stone-500 dark:text-stone-400 mb-3 uppercase tracking-wider">
                 Workday
               </div>
-              <Slider
-                label="Duration"
-                value={workday}
-                min={4}
-                max={12}
-                step={1}
-                onChange={setWorkday}
-                formatValue={(v) => `${v} hours`}
-              />
+              <div className="flex flex-col gap-3">
+                <Slider
+                  label="Traditional"
+                  value={tradWorkday}
+                  min={4}
+                  max={16}
+                  step={1}
+                  onChange={setTradWorkday}
+                  formatValue={(v) => `${v} hours`}
+                />
+                <Slider
+                  label="Agentic"
+                  value={agentWorkday}
+                  min={4}
+                  max={16}
+                  step={1}
+                  onChange={setAgentWorkday}
+                  formatValue={(v) => `${v} hours`}
+                />
+              </div>
             </div>
 
             {/* Agent setup */}
@@ -874,7 +887,7 @@ export default function SparseWorkingChart() {
                 <span className="text-xs font-medium text-stone-600 dark:text-stone-400">Agentic</span>
                 <span className="text-xs tabular-nums flex gap-3">
                   <span className="text-teal-700/70 dark:text-teal-400/70">
-                    <span className="font-medium text-teal-700 dark:text-teal-400">{Math.round(idleStats.agent.active)} min</span> reviewing
+                    <span className="font-medium text-teal-700 dark:text-teal-400">{Math.round(idleStats.agent.active)} min</span> working
                   </span>
                   <span className="text-stone-400 dark:text-stone-500">
                     <span className="font-medium">{Math.round(idleStats.agent.idle)} min</span> idle
