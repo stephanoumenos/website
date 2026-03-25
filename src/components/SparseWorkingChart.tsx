@@ -377,9 +377,9 @@ export default function SparseWorkingChart() {
   const [agentWorkday, setAgentWorkday] = useState(12);
   const [agents, setAgents] = useState(3);
   const [agentSpeed, setAgentSpeed] = useState(3);
-  const [reviewTime, setReviewTime] = useState(5);
+  const [reviewTime, setReviewTime] = useState(10);
   const [autonomy, setAutonomy] = useState(20);
-  const [responseDelay, setResponseDelay] = useState(3);
+  const [responseDelay, setResponseDelay] = useState(30);
   const [serialFraction, setSerialFraction] = useState(0.15);
   const [reworkRate, setReworkRate] = useState(0.15);
   const [seedOffset, setSeedOffset] = useState(0);
